@@ -1,0 +1,118 @@
+/* =============================== */
+/* Dashboard Layout */
+/* =============================== */
+
+.dashboard-container {
+  min-height: calc(100vh - 64px); /* navbar safe */
+  padding: 48px 24px;
+  background: var(--bg);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* =============================== */
+/* Header */
+/* =============================== */
+
+.dashboard-header {
+  max-width: 900px;
+  width: 100%;
+  margin-bottom: 48px;
+  text-align: left;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.dashboard-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* =============================== */
+/* Cards Grid */
+/* =============================== */
+
+.dashboard-cards {
+  width: 100%;
+  max-width: 900px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+/* =============================== */
+/* Card */
+/* =============================== */
+
+.dashboard-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px;
+
+  text-decoration: none;
+  color: var(--text-primary);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+/* Dark mode card depth */
+.dark .dashboard-card {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* =============================== */
+/* Card Content */
+/* =============================== */
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.4rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* =============================== */
+/* Disabled (AI coming soon) */
+/* =============================== */
+
+.dashboard-card.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

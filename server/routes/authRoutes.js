@@ -8,6 +8,8 @@ const{
     loginUser,
     sendOtp,
     verifyOtp,
+    forgotPassword,
+    resetPassword,
     refreshAccessToken,
     logoutUser,
 }=require('../controllers/authController') 
@@ -29,6 +31,12 @@ router.post('/send-otp',sendOtp)
 
 //verify otp  
 router.post('/verify-otp',verifyOtp)
+
+// forgot-password
+router.post('/forgot-password',forgotPassword)
+
+// reset-password
+router.post('/reset-password',resetPassword)
 
 // refresh access token
 router.post('/refresh',refreshAccessToken)

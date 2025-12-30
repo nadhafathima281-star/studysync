@@ -32,12 +32,19 @@ const userSchema=new mongoose.Schema(
             type:Boolean,
             default:false,
         },
-        // otp for forgot password/login
+        // otp for login(email)
         otp:{
             type:String,
         },
         otpExpires:{
             type:Date
+        },
+        // forgot password otp(sms)
+        resetOtp:{
+            type:String,
+        },
+        resetOTPExpiry:{
+            type:Date,
         },
         refreshToken:{
             type:String,

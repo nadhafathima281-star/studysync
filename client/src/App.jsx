@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Navbar from "./components/common/Navbar";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+// import ThemeToggle from "./components/common/ThemeToggle";
 
+// Pages
+import Dashboard from "./pages/dashboard/Dashboard";
+import Tasks from "./pages/tasks/Tasks";
+import Notes from "./pages/notes/Notes";
+import Flashcards from "./pages/flashcards/Flashcards";
+
+// Auth pages
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import VerifyOTP from "./pages/auth/VerifyOTP";
+
+export default function App() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      {/* GLOBAL THEME TOGGLE – visible everywhere */}
+      {/* <div className="global-theme-toggle">
+        <ThemeToggle />
+      </div> */}
 
-export default App
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
+
+        {/* Protected Dashboard */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Dashboard />
+              </>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Tasks */}
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Tasks />
+              </>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Notes */}
+        <Route
+          path="/notes"
+          element={
+            <ProtectedRoute>
+              <>
+                <Navbar />
+                <Notes />
+              </>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Flashcards */}
+<Route
+  path="/flashcards"
+  element={
+    <ProtectedRoute>
+      <>
+        <Navbar />
+        <Flashcards />
+      </>
+    </ProtectedRoute>
+  }
+/>
+
+      </Routes>
+    </>
+  );
+}

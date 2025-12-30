@@ -1,0 +1,140 @@
+/* =============================== */
+/* Navbar */
+/* =============================== */
+
+.navbar {
+  height: 64px;
+  padding: 0 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* =============================== */
+/* Left – Brand */
+/* =============================== */
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* =============================== */
+/* Center – Search */
+/* =============================== */
+
+.navbar-search {
+  position: relative;
+  width: 360px;
+  max-width: 100%;
+}
+
+.navbar-search input {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px 0 36px;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+
+  font-size: 0.95rem;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+/* Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: 46px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+
+.search-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+}
+
+.search-item:hover {
+  background: var(--input-bg);
+}
+
+.search-type {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.search-text {
+  font-size: 0.9rem;
+}
+
+.search-empty {
+  padding: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* =============================== */
+/* Right – Actions */
+/* =============================== */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.logout-btn {
+  border: none;
+  background: transparent;
+  color: var(--error);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.logout-btn:hover {
+  opacity: 0.8;
+} 

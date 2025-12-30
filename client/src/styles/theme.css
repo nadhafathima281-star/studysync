@@ -1,0 +1,53 @@
+/* =============================== */
+/* StudySync Theme – Light & Dark */
+/* =============================== */
+
+/* Default (Light Mode) */
+:root,
+[data-theme="light"] {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+
+  --primary: #1f2937;
+  --accent: #6366f1;
+
+  --input-bg: #f9fafb;
+  --border: #e5e7eb;
+
+  --error: #dc2626;
+  --success: #16a34a;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #111827;
+
+  --text-primary: #f9fafb;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+
+  --primary: #6366f1;
+  --accent: #818cf8;
+
+  --input-bg: #020617;
+  --border: #1e293b;
+
+  --error: #f87171;
+  --success: #22c55e;
+}
+
+/* =============================== */
+/* Global styles */
+/* =============================== */
+
+html,
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

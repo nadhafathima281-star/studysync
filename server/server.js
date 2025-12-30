@@ -8,11 +8,21 @@ const cookieParser=require('cookie-parser')
 const authRoutes=require('./routes/authRoutes')
 const taskRoutes=require('./routes/taskRoutes')
 const noteRoutes=require('./routes/noteRoutes')
+const flashcardRoutes=require('./routes/flashcardRoutes')
+const resourceRoutes=require('./routes/resourceRoutes')
+const adminRoutes=require('./routes/adminRoutes')
+const reportRoutes=require('./routes/reportRoutes')
 connectDB(); //  MongoDB connection
 
 const app = express();
 
-app.use(cors()); //enable cors so frontend can communicate with backend
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend URL
+    credentials: true,              // allow cookies
+  })
+);
+
 app.use(cookieParser())
 app.use((req, res, next) => {
   if (
@@ -41,6 +51,18 @@ app.use('/api/tasks',taskRoutes)
 
 // note routes
 app.use('/api/notes',noteRoutes)
+
+// flashcard routes
+app.use('/api/flashcards',flashcardRoutes)
+
+// resource routes
+app.use('/api/resources',resourceRoutes)
+
+// admin routes
+app.use('/api/admin',adminRoutes)
+
+// report routes
+app.use('/api/reports',reportRoutes)
 
 // get port no from .env ot use 5000 as default
 const PORT = process.env.PORT || 5000;   

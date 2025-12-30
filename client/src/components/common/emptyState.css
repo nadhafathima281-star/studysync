@@ -1,0 +1,44 @@
+/* ===============================
+   Empty State (StudySync)
+================================ */
+
+.empty-state {
+  margin-top: 60px;
+  padding: 40px 20px;
+  text-align: center;
+
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+}
+
+.empty-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.empty-description {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Optional action button */
+.empty-action {
+  margin-top: 16px;
+  padding: 8px 16px;
+
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  background: var(--accent);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.empty-action:hover {
+  opacity: 0.9;
+}

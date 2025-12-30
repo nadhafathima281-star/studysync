@@ -2,7 +2,12 @@ const User=require('../models/User')
 const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const sendEmail=require('../utils/sendEmail')
-// const twilio=require('twilio')
+const twilio=require('twilio')
+
+const client=twilio(
+    process.env.TWILIO_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
 
 
 
@@ -205,16 +210,28 @@ const loginUser=async(req,res)=>{
             return res.status(400).json({message:'Invalid credentials'})
         }
 
-        // generate 6 digit OTP
-        const otp = Math.floor(100000 + Math.random()* 900000).toString()
+       
+const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        user.otp=otp
-        user.otpExpires=Date.now() + 5 * 60 * 1000 //5 minutes
-        await user.save()
+user.otp = otp;
+user.otpExpires = Date.now() + 5 * 60 * 1000; // 5 minutes
+await user.save();
 
-        res.status(200).json({
-            message:'OTP required',
-        })
+// SEND OTP EMAIL HERE ✅
+await sendEmail({
+  to: user.email,
+  subject: "StudySync Login OTP",
+  html: `
+    <h3>Your Login OTP</h3>
+    <h2 style="letter-spacing:4px;">${otp}</h2>
+    <p>Valid for 5 minutes.</p>
+  `,
+});
+
+res.status(200).json({
+  message: "OTP sent to your email",
+});
+
 
   } catch (error) {
     res.status(500).json({ message: "Server error" })
@@ -322,6 +339,77 @@ const verifyOtp=async(req,res)=>{
     }
 }
 
+// FORGOT PASSWORD-SEND SMS OTP
+const forgotPassword=async(req,res)=>{
+    try{
+        const{phone}=req.body;
+
+        if(!phone){
+            return res.status(400).json({message:"Phone number is required"});
+        }
+
+        const user=await User.findOne({phone});
+        if(!user){
+            return res.status(404).json({message:"User not found"});
+        }
+
+        const otp=Math.floor(100000+Math.random()*900000).toString();
+
+        user.resetOtp=otp;
+        user.resetOTPExpiry=Date.now()+10*60*1000; //10min
+        await user.save();
+
+        const formattedPhone=phone.startsWith("+")
+        ? phone
+        : `+91${phone}`;
+
+        await client.messages.create({
+            body:`Your StudySync password reset otp is ${otp}`,
+            from:process.env.TWILIO_PHONE,
+            to:formattedPhone,
+        });
+
+        res.json({message:"Password reset OTP sent via SMS"});
+    }catch(error){
+        console.error(error);
+        res.status(500).json({message:"Failed to send reset OTP"});
+    }
+};
+
+// RESET PASSWORD USING SMS OTP
+const resetPassword=async(req,res)=>{
+    try{
+        const{phone,otp,newPassword}=req.body;
+
+        if(!phone || !otp || !newPassword){
+            return res.status(400).json({message:"All fields are required"});
+        }
+
+        const user=await User.findOne({
+            phone,
+            resetOtp:otp,
+            resetOTPExpiry:{$gt:Date.now()},
+        });
+
+        if(!user){
+            return res.status(400).json({message:"Invalid or expired OTP"});
+        }
+
+        const hashedPassword=await bcrypt.hash(newPassword,10);
+        user.password=hashedPassword;
+
+        user.resetOtp=undefined;
+        user.resetOTPExpiry=undefined;
+
+        await user.save();
+
+        res.json({message:"Password reset successful"});
+    }catch(error){
+        console.error(error);
+        res.status(500).json({message:"Failed to reset password"});
+        
+    }
+};
 
 // REFRESH ACCESS TOKEN
 const refreshAccessToken=async(req,res)=>{
@@ -395,6 +483,8 @@ module.exports={
     loginUser,
     sendOtp,
     verifyOtp,
+    forgotPassword,
+    resetPassword,
     refreshAccessToken,
     logoutUser
 }
