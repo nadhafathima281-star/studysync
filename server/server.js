@@ -12,6 +12,7 @@ const flashcardRoutes=require('./routes/flashcardRoutes')
 const resourceRoutes=require('./routes/resourceRoutes')
 const adminRoutes=require('./routes/adminRoutes')
 const reportRoutes=require('./routes/reportRoutes')
+const aiRoutes=require('./routes/aiRoutes')
 connectDB(); //  MongoDB connection
 
 const app = express();
@@ -63,6 +64,9 @@ app.use('/api/admin',adminRoutes)
 
 // report routes
 app.use('/api/reports',reportRoutes)
+
+// ai routes
+app.use('/api/ai',aiRoutes)
 
 // get port no from .env ot use 5000 as default
 const PORT = process.env.PORT || 5000;   

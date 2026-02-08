@@ -1,48 +1,91 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTasks } from "../../context/TaskContext";
+import { useNotes } from "../../context/NoteContext";
 import "./dashboard.css";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { tasks } = useTasks();
+  const { notes } = useNotes();
+
+  const pendingTasks = tasks.filter(t => t.status !== "completed");
+  const recentNotes = notes.slice(0, 3);
+  const recentTasks = tasks.slice(0, 3);
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard">
       {/* Header */}
       <div className="dashboard-header">
-        <h1 className="dashboard-title">
+        <h1>
           Welcome{user?.name ? `, ${user.name}` : ""} 👋
         </h1>
         <p className="dashboard-subtitle">
-          Your personal study assistant — stay organised and focused.
+          Here’s a quick overview of your study progress.
         </p>
       </div>
 
-      {/* Main cards */}
-      <div className="dashboard-cards">
-        <Link to="/tasks" className="dashboard-card">
-          <div className="card-icon">📋</div>
-          <h3 className="card-title">Tasks</h3>
-          <p className="card-desc">
-            Plan your day and track progress.
-          </p>
-        </Link>
+      {/* Stats */}
+      <div className="dashboard-stats">
+        <div className="stat">
+          <h3>{tasks.length}</h3>
+          <p>Total Tasks</p>
+        </div>
+        <div className="stat">
+          <h3>{pendingTasks.length}</h3>
+          <p>Pending Tasks</p>
+        </div>
+        <div className="stat">
+          <h3>{notes.length}</h3>
+          <p>Notes</p>
+        </div>
+      </div>
 
-        <Link to="/notes" className="dashboard-card">
-          <div className="card-icon">📝</div>
-          <h3 className="card-title">Notes</h3>
-          <p className="card-desc">
-            Write and organise study notes.
-          </p>
-        </Link>
+      {/* Main Grid */}
+      <div className="dashboard-grid">
+        {/* Recent Tasks */}
+        <div className="dashboard-panel">
+          <div className="panel-header">
+            <h3>Recent Tasks</h3>
+            <Link to="/tasks">View all</Link>
+          </div>
 
-        <Link to="/ai" className="dashboard-card disabled">
-          <div className="card-icon">🤖</div>
-          <h3 className="card-title">AI Tools</h3>
-          <p className="card-desc">
-            Smart summaries & quizzes (coming soon)
-          </p>
-        </Link>
+          {recentTasks.length === 0 ? (
+            <p className="empty">No tasks yet</p>
+          ) : (
+            <ul>
+              {recentTasks.map(task => (
+                <li key={task._id}>{task.title}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Recent Notes */}
+        <div className="dashboard-panel">
+          <div className="panel-header">
+            <h3>Recent Notes</h3>
+            <Link to="/notes">View all</Link>
+          </div>
+
+          {recentNotes.length === 0 ? (
+            <p className="empty">No notes yet</p>
+          ) : (
+            <ul>
+              {recentNotes.map(note => (
+                <li key={note._id}>{note.title}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="dashboard-actions">
+        <Link to="/tasks" className="action-btn">➕ Add Task</Link>
+        <Link to="/notes" className="action-btn">➕ Add Note</Link>
+        <Link to="/flashcards" className="action-btn">📚 Flashcards</Link>
+        <Link to="/resources" className="action-btn">🔗 Resources</Link>
       </div>
     </div>
   );

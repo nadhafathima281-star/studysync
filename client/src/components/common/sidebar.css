@@ -1,0 +1,32 @@
+.sidebar {
+  width: 220px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  padding: 10px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.sidebar-link:hover {
+  background: var(--hover-bg);
+}
+
+.sidebar-link.active {
+  background: var(--primary);
+  color: white;
+}
+
+@media(max-width:768px){
+    .sidebar{
+        display: none;
+    }
+}

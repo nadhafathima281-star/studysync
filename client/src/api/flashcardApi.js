@@ -1,5 +1,5 @@
 import api from "./axios";
-import axios from "./axios";
+// import axios from "./axios";
 
 // DECK APIs
 
@@ -7,7 +7,7 @@ import axios from "./axios";
 export const getDecks=()=>api.get("/flashcards/decks");
 
 // create a new flashcard deck
-export const createDeck=(deck)=>api.post("/flashcards/decks",data);
+export const createDeck=(deck)=>api.post("/flashcards/decks",deck);
 
 // delete a flashcard deck
 export const deleteDeck=(id)=>

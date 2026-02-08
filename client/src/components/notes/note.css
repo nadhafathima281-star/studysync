@@ -177,6 +177,40 @@
 }
 
 /* ===============================
+   AI EXPLANATION
+================================ */
+.note-ai-btn{
+  margin-top: 12px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.note-ai-btn:disabled{
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ai-response {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+
+.ai-response strong{
+  margin-bottom: 6px;
+}
+
+
+/* ===============================
    RESPONSIVE
 ================================ */
 
