@@ -17,12 +17,24 @@ export default function VerifyOtp() {
 
   const email = location.state?.email;
 
-  // safety check
+  // redirect safety
   useEffect(() => {
     if (!email) navigate("/login");
   }, [email, navigate]);
 
-  // handle input change
+  // auto focus first otp box
+  useEffect(() => {
+    inputsRef.current[0]?.focus();
+  }, []);
+
+  // mask email
+  const maskEmail = (email) => {
+    if (!email) return "";
+    const [name, domain] = email.split("@");
+    const firstChar = name[0];
+    return `${firstChar}***@${domain}`;
+  };
+
   const handleChange = (value, index) => {
     if (!/^\d?$/.test(value)) return;
 
@@ -35,7 +47,6 @@ export default function VerifyOtp() {
     }
   };
 
-  // handle backspace
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputsRef.current[index - 1].focus();
@@ -67,9 +78,10 @@ export default function VerifyOtp() {
 
   return (
     <div className="auth-page">
-       <div className="auth-theme-toggle">
-              <ThemeToggle/>
-            </div>
+      <div className="auth-theme-toggle">
+        <ThemeToggle />
+      </div>
+
       <form className="auth-card" onSubmit={handleSubmit}>
         <div className="auth-icon">
           <img src={AppIcon} alt="StudySync logo" />
@@ -77,10 +89,9 @@ export default function VerifyOtp() {
 
         <h2 className="auth-title">Verify OTP</h2>
         <p className="auth-subtitle">
-          Enter the code sent to <strong>{email}</strong>
+          Enter the code sent to <strong>{maskEmail(email)}</strong>
         </p>
 
-        {/* OTP BOXES */}
         <div className="otp-container">
           {otp.map((digit, index) => (
             <input
@@ -92,6 +103,8 @@ export default function VerifyOtp() {
               ref={(el) => (inputsRef.current[index] = el)}
               onChange={(e) => handleChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
+              autoComplete="one-time-code"
+              inputMode="numeric"
             />
           ))}
         </div>
@@ -99,6 +112,10 @@ export default function VerifyOtp() {
         <button className="auth-btn" disabled={loading}>
           {loading ? "Verifying..." : "Verify & Continue"}
         </button>
+
+        <p className="auth-footer" style={{ marginTop: "14px" }}>
+          OTP is valid for 5 minutes.
+        </p>
 
         <p className="auth-footer">
           <Link to="/login" className="auth-link">

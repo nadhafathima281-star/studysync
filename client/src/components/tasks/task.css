@@ -1,110 +1,160 @@
-/* ===============================
-   Task Card
-================================ */
-
-.task-card {
+/* ========== FORM ========== */
+.task-form {
   display: flex;
-  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 18px 0 28px 0;
   align-items: center;
-
-  padding: 16px 20px;
-  margin-bottom: 12px;
-
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.task-card:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
+/* Inputs */
+.task-input,
+.task-date {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  flex: 1;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
-.task-content {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.task-title {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.task-status {
-  font-size: 0.75rem;
-  color: var(--success);
-  font-weight: 600;
+/* Focus effect */
+.task-input:focus,
+.task-date:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 /* Actions */
-.task-actions {
+.task-form-actions {
   display: flex;
   gap: 10px;
 }
 
-.task-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-
+/* Buttons */
+.primary-btn {
+  background: #6366f1;
+  color: white;
   border: none;
-  background: var(--input-bg);
-  color: var(--text-secondary);
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
 
+.primary-btn:hover {
+  background: #4f46e5;
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.secondary-btn:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* ========== TASK CARD ========== */
+.task-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  transition: all 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+/* Completed style */
+.task-card.completed {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.task-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* Checkbox */
+.task-check {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: 0.2s ease;
+}
+
+.task-check:hover {
+  color: #6366f1;
+}
+
+.task-check.checked {
+  color: #6366f1;
+}
+
+/* Content */
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-color, #111827);
+}
+
+.task-title.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Meta (date) */
+.task-meta {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6b7280;
+}
 
+/* ========== ACTIONS ========== */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
   cursor: pointer;
+  color: #6b7280;
+  transition: 0.2s ease;
 }
 
-.task-btn:hover {
-  background: var(--border);
+.icon-btn:hover {
+  color: #111827;
 }
 
-.task-btn.delete {
-  color: var(--error);
-}
-
-
-/* taskform */
-
-.task-form{
-    display: flex;
-    gap:10px;
-    margin-bottom: 24px;
-}
-.task-input{
-    flex: 1;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--input-bg);
-    color:var(--text-primary);
-    font-size: 0.9rem;
-}
-.task-submit{
-    padding: 0 18px;
-    border-radius: 12px;
-    border: none;
-    background: var(--accent);
-    color: white;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-.task-submit:disabled{
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-.task-cancel{
-    padding: 0 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-secondary);
-    cursor: pointer;
+.icon-btn.delete:hover {
+  color: #ef4444;
 }

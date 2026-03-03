@@ -1,53 +1,209 @@
+/* ===================================================== */
+/* StudySync – Balanced Modern SaaS Theme System */
+/* ===================================================== */
+
 /* =============================== */
-/* StudySync Theme – Light & Dark */
+/* RESET */
 /* =============================== */
 
-/* Default (Light Mode) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* =============================== */
+/* LIGHT MODE */
+/* =============================== */
+
 :root,
 [data-theme="light"] {
-  --bg: #f5f7fb;
+  /* Background Layers */
+  --bg: #f4f6fb;
   --surface: #ffffff;
+  --card: #ffffff;
 
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-muted: #9ca3af;
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
 
-  --primary: #1f2937;
+  /* Accent */
   --accent: #6366f1;
+  --accent-hover: #4f46e5;
 
-  --input-bg: #f9fafb;
-  --border: #e5e7eb;
+  /* Borders */
+  --border: #e2e8f0;
 
-  --error: #dc2626;
+  /* Inputs */
+  --input-bg: #f8fafc;
+
+  /* States */
   --success: #16a34a;
+  --error: #dc2626;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* Dark Mode */
+/* =============================== */
+/* DARK MODE */
+/* =============================== */
+
 [data-theme="dark"] {
-  --bg: #0f172a;
-  --surface: #111827;
+  /* Background Layers */
+  --bg: #0b1220;
+  --surface: #111c2d;
+  --card: #18263a; /* Slightly lifted from surface for depth */
 
-  --text-primary: #f9fafb;
+  /* Text */
+  --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
+  --text-muted: #94a3b8;
 
-  --primary: #6366f1;
-  --accent: #818cf8;
+  /* Accent */
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
 
-  --input-bg: #020617;
-  --border: #1e293b;
+  /* Borders */
+  --border: #243244;
 
-  --error: #f87171;
+  /* Inputs */
+  --input-bg: #0f1a2b;
+
+  /* States */
   --success: #22c55e;
+  --error: #f87171;
+
+  /* Shadows (stronger in dark for depth) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
-/* =============================== */
-/* Global styles */
-/* =============================== */
+/* ===================================================== */
+/* GLOBAL BASE */
+/* ===================================================== */
 
 html,
 body {
-  background-color: var(--bg);
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ===================================================== */
+/* CARD SYSTEM */
+/* ===================================================== */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ===================================================== */
+/* BUTTON SYSTEM */
+/* ===================================================== */
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: var(--input-bg);
+}
+
+/* ===================================================== */
+/* INPUT SYSTEM */
+/* ===================================================== */
+
+input,
+textarea,
+select {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* ===================================================== */
+/* PROGRESS BAR */
+/* ===================================================== */
+
+.progress-bg {
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: var(--accent);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* ===================================================== */
+/* TEXT UTILITIES */
+/* ===================================================== */
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* ===================================================== */
+/* SECTION SPACING */
+/* ===================================================== */
+
+.section {
+  margin-bottom: 32px;
 }

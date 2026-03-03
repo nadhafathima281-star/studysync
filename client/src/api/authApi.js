@@ -33,3 +33,18 @@ export const refreshToken=()=>{
 export const logoutUser=()=>{
   return api.post('/auth/logout')
 }
+
+// FORGOT PASSWORD (SEND SMS OTP)
+export const forgotPassword=(data)=>{
+  return api.post('/auth/forgot-password',data) 
+}
+
+// VERIFY FORGOT PASSWORD OTP
+export const verifyResetOtp=(data)=>{
+  return api.post('/auth/verify-reset-otp',data) 
+}
+
+// RESET PASSWORD (]SET NEW PASSWORD)
+export const resetPassword=(data)=>{
+  return api.post('/auth/reset-password',data) 
+}

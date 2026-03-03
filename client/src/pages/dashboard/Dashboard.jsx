@@ -1,92 +1,173 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useTasks } from "../../context/TaskContext";
-import { useNotes } from "../../context/NoteContext";
+import api from "../../api/axios";
+import {
+  CheckSquare,
+  FileText,
+  Layers,
+  BookOpen,
+  Flame,
+  Clock
+} from "lucide-react";
 import "./dashboard.css";
+import Pomodoro from "./Pomodoro";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const { tasks } = useTasks();
-  const { notes } = useNotes();
+  const [stats, setStats] = useState({
+    tasks: 0,
+    notes: 0,
+    flashcards: 0,
+    resources: 0,
+    weeklyMinutes: 0,
+    weeklyGoal: 600,
+    streak: 5
+  });
 
-  const pendingTasks = tasks.filter(t => t.status !== "completed");
-  const recentNotes = notes.slice(0, 3);
-  const recentTasks = tasks.slice(0, 3);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await api.get("/dashboard/stats");
+        setStats(prev => ({ ...prev, ...res.data }));
+      } catch (error) {
+        console.error("Failed to fetch dashboard stats");
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const progressPercent = Math.min(
+    (stats.weeklyMinutes / stats.weeklyGoal) * 100,
+    100
+  );
 
   return (
-    <div className="dashboard">
-      {/* Header */}
+    <div className="dashboard-wrapper">
+
+      {/* HEADER */}
       <div className="dashboard-header">
-        <h1>
-          Welcome{user?.name ? `, ${user.name}` : ""} 👋
-        </h1>
-        <p className="dashboard-subtitle">
-          Here’s a quick overview of your study progress.
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="dashboard-stats">
-        <div className="stat">
-          <h3>{tasks.length}</h3>
-          <p>Total Tasks</p>
-        </div>
-        <div className="stat">
-          <h3>{pendingTasks.length}</h3>
-          <p>Pending Tasks</p>
-        </div>
-        <div className="stat">
-          <h3>{notes.length}</h3>
-          <p>Notes</p>
+        <div>
+          <h1>Welcome back, {user?.name || "Student"} 👋</h1>
+          <p>Here’s your study progress for today.</p>
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="dashboard-grid">
-        {/* Recent Tasks */}
-        <div className="dashboard-panel">
-          <div className="panel-header">
-            <h3>Recent Tasks</h3>
-            <Link to="/tasks">View all</Link>
+      {/* STATS GRID */}
+      <div className="stats-grid">
+        <StatCard
+          icon={<CheckSquare size={18} />}
+          title="Tasks"
+          value={stats.tasks}
+        />
+        <StatCard
+          icon={<FileText size={18} />}
+          title="Notes"
+          value={stats.notes}
+        />
+        <StatCard
+          icon={<Layers size={18} />}
+          title="Flashcards"
+          value={stats.flashcards}
+        />
+        <StatCard
+          icon={<BookOpen size={18} />}
+          title="Resources"
+          value={stats.resources}
+        />
+      </div>
+
+      {/* MAIN GRID */}
+      <div className="dashboard-main">
+
+        {/* LEFT SIDE */}
+        <div className="left-section">
+
+          {/* WEEKLY PROGRESS */}
+          <div className="card progress-card">
+            <div className="card-header">
+              <h3>Weekly Progress</h3>
+              <span>{Math.round(progressPercent)}%</span>
+            </div>
+
+            <p className="card-sub">
+              {stats.weeklyMinutes} / {stats.weeklyGoal} mins
+            </p>
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
           </div>
 
-          {recentTasks.length === 0 ? (
-            <p className="empty">No tasks yet</p>
-          ) : (
-            <ul>
-              {recentTasks.map(task => (
-                <li key={task._id}>{task.title}</li>
-              ))}
-            </ul>
-          )}
+          {/* POMODORO */}
+          <div className="card pomodoro-card">
+            <div className="card-header">
+              <h3>Focus Time</h3>
+              <Clock size={18} />
+            </div>
+            <Pomodoro />
+          </div>
         </div>
 
-        {/* Recent Notes */}
-        <div className="dashboard-panel">
-          <div className="panel-header">
-            <h3>Recent Notes</h3>
-            <Link to="/notes">View all</Link>
+        {/* RIGHT SIDE */}
+        <div className="right-section">
+
+          {/* QUICK OVERVIEW */}
+          <div className="card overview-card">
+            <h3>Quick Overview</h3>
+
+            <div className="overview-item">
+              <span>Total Tasks</span>
+              <strong>{stats.tasks}</strong>
+            </div>
+
+            <div className="overview-item">
+              <span>Total Notes</span>
+              <strong>{stats.notes}</strong>
+            </div>
+
+            <div className="overview-item">
+              <span>Total Flashcards</span>
+              <strong>{stats.flashcards}</strong>
+            </div>
           </div>
 
-          {recentNotes.length === 0 ? (
-            <p className="empty">No notes yet</p>
-          ) : (
-            <ul>
-              {recentNotes.map(note => (
-                <li key={note._id}>{note.title}</li>
-              ))}
-            </ul>
-          )}
+          {/* STUDY STREAK */}
+          <div className="card streak-card">
+            <div className="streak-header">
+              <Flame size={18} />
+              <span>Study Streak</span>
+            </div>
+            <h2>{stats.streak} Days</h2>
+            <p>Keep it going! Consistency builds mastery.</p>
+          </div>
+
+          {/* STUDY TIP */}
+          <div className="card tip-card">
+            <h3>Study Tip</h3>
+            <p>
+              Review notes within 24 hours to improve long-term retention.
+            </p>
+          </div>
+
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Quick Actions */}
-      <div className="dashboard-actions">
-        <Link to="/tasks" className="action-btn">➕ Add Task</Link>
-        <Link to="/notes" className="action-btn">➕ Add Note</Link>
-        <Link to="/flashcards" className="action-btn">📚 Flashcards</Link>
-        <Link to="/resources" className="action-btn">🔗 Resources</Link>
+/* Reusable Stat Card */
+function StatCard({ icon, title, value }) {
+  return (
+    <div className="stat-card">
+      <div className="stat-top">
+        {icon}
+        <span>{title}</span>
       </div>
+      <h2>{value}</h2>
     </div>
   );
 }

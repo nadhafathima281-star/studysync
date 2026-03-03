@@ -15,9 +15,10 @@ const noteSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
-    tags:{
-        type:[String],  //array of strings
-        default:[], //default to empty array
+    subject:{
+        type:String, 
+        required:true,
+        trim:true,
     },
 },
 {timestamps:true}

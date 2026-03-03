@@ -1,3 +1,6 @@
+/* ===================================== */
+/* AUTH PAGE CONTAINER */
+/* ===================================== */
 
 .auth-page {
   min-height: 100vh;
@@ -5,17 +8,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px;
+  padding: 40px 20px;
+  position: relative;
 }
+
+/* ===================================== */
+/* AUTH CARD */
+/* ===================================== */
 
 .auth-card {
   width: 100%;
   max-width: 460px;
   background: var(--surface);
   padding: 40px;
-  border-radius: 18px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
 }
+
+/* ===================================== */
+/* LOGO */
+/* ===================================== */
 
 .auth-icon {
   display: flex;
@@ -29,34 +43,59 @@
   object-fit: contain;
 }
 
+/* ===================================== */
+/* TITLES */
+/* ===================================== */
+
 .auth-title {
   text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
   margin-bottom: 8px;
   color: var(--text-primary);
 }
 
 .auth-subtitle {
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
   margin-bottom: 28px;
 }
+
+/* ===================================== */
+/* FORM */
+/* ===================================== */
 
 .form-group {
   margin-bottom: 18px;
 }
 
+/* INPUT WRAPPER FOR ICONS */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* INPUT */
 .auth-input {
-  width: 90%;
+  width: 100%;
   height: 50px;
-  padding: 0 16px;
+  padding: 0 16px 0 42px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--input-bg);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-primary);
+  transition: all 0.2s ease;
 }
 
 .auth-input:focus {
@@ -65,23 +104,65 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
+/* ERROR STATE */
+.auth-input.error {
+  border-color: var(--error);
+}
+
+.input-error {
+  font-size: 0.8rem;
+  color: var(--error);
+  margin-top: 6px;
+  display: block;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.toggle-password:hover{
+  opacity: 0.7;
+}
+/* ===================================== */
+/* BUTTON */
+/* ===================================== */
+
 .auth-btn {
   width: 100%;
   height: 52px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: none;
-  background: var(--primary);
+  background: var(--accent);
   color: #fff;
-  font-size: 1.05rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   margin-top: 16px;
+  transition: 0.2s ease;
+}
+
+.auth-btn:hover {
+  background: var(--accent-hover);
 }
 
 .auth-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+/* ===================================== */
+/* FOOTER */
+/* ===================================== */
 
 .auth-footer {
   text-align: center;
@@ -99,10 +180,16 @@
 .auth-link:hover {
   text-decoration: underline;
 }
+auth-row{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
 
-/* ========================= */
+/* ===================================== */
 /* OTP BOX STYLES */
-/* ========================= */
+/* ===================================== */
 
 .otp-container {
   display: flex;
@@ -120,6 +207,7 @@
   border: 1px solid var(--border);
   background: var(--input-bg);
   color: var(--text-primary);
+  transition: 0.2s ease;
 }
 
 .otp-input:focus {
@@ -128,15 +216,26 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
+/* ===================================== */
+/* THEME TOGGLE POSITION */
+/* ===================================== */
+
 .auth-theme-toggle {
   position: absolute;
   top: 20px;
   right: 20px;
   z-index: 10;
 }
-/* ========================= */
+
+/* ===================================== */
 /* RESPONSIVE */
-/* ========================= */
+/* ===================================== */
+
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 32px;
+  }
+}
 
 @media (max-width: 480px) {
   .auth-page {
@@ -144,7 +243,12 @@
   }
 
   .auth-card {
-    padding: 28px;
+    padding: 26px;
+    border-radius: 14px;
+  }
+
+  .auth-title {
+    font-size: 1.4rem;
   }
 
   .otp-input {

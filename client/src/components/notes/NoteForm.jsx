@@ -1,27 +1,19 @@
 import { useState } from "react";
-import RichTextEditor from "../../components/notes/RichTextEditor"; // ✅ NEW
 import "./note.css";
 
 export default function NoteForm({ onSubmit, initialData, onCancel }) {
   const [title, setTitle] = useState(initialData?.title || "");
+  const [subject, setSubject] = useState(initialData?.subject || "");
   const [content, setContent] = useState(initialData?.content || "");
-  const [tags, setTags] = useState(initialData?.tags?.join(", ") || "");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!title.trim() || !content.trim()) return;
+    if (!title || !subject || !content) return;
 
     setLoading(true);
     try {
-      await onSubmit({
-        title,
-        content, // HTML string now
-        tags: tags
-          ? tags.split(",").map((t) => t.trim())
-          : [],
-      });
+      await onSubmit({ title, subject, content });
       onCancel?.();
     } finally {
       setLoading(false);
@@ -30,51 +22,47 @@ export default function NoteForm({ onSubmit, initialData, onCancel }) {
 
   return (
     <form className="note-form" onSubmit={handleSubmit}>
-      {/* Title */}
-      <input
-        type="text"
-        className="note-input"
-        placeholder="Note title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+  <div className="form-group">
+    <label>Title</label>
+    <input
+      type="text"
+      className="note-input"
+      placeholder="Note title..."
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+    />
+  </div>
 
-      {/* 🔥 Rich Text Editor replaces textarea */}
-      <RichTextEditor value={content} onChange={setContent} />
+  <div className="form-group">
+    <label>Subject</label>
+    <input
+      type="text"
+      className="note-input"
+      placeholder="e.g. Math, History, Science..."
+      value={subject}
+      onChange={(e) => setSubject(e.target.value)}
+    />
+  </div>
 
-      {/* Tags */}
-      <input
-        type="text"
-        className="note-input"
-        placeholder="Tags (comma separated)"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-      />
+  <div className="form-group">
+    <label>Content</label>
+    <textarea
+      className="note-textarea"
+      placeholder="Write your notes here..."
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+    />
+  </div>
 
-      {/* Actions */}
-      <div className="note-form-actions">
-        <button
-          type="submit"
-          className="note-submit"
-          disabled={loading}
-        >
-          {loading
-            ? "Saving..."
-            : initialData
-            ? "Update"
-            : "Add"}
-        </button>
+  <div className="note-form-actions">
+    <button type="button" className="cancel-btn" onClick={onCancel}>
+      Cancel
+    </button>
 
-        {onCancel && (
-          <button
-            type="button"
-            className="note-cancel"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-        )}
-      </div>
-    </form>
+    <button type="submit" className="save-btn">
+      Save Note
+    </button>
+  </div>
+</form>
   );
 }

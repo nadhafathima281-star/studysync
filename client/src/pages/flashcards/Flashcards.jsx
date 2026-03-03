@@ -1,165 +1,163 @@
 import { useEffect, useState } from "react";
-import {
-  getDecks,
-  createDeck,
-  getCardsByDeck,
-  createCard,
-} from "../../api/flashcardApi";
-
-import FlashcardDeck from "../../components/flashcards/FlashcardDeck";
-import FlashCard from "../../components/flashcards/FlashCard";
+import { useFlashcards } from "../../context/FlashcardContext";
+import DeckCard from "../../components/flashcards/DeckCard";
+import DeckForm from "../../components/flashcards/DeckForm";
+import Loader from "../../components/common/Loader";
+import EmptyState from "../../components/common/EmptyState";
+import Modal from "../../components/common/Modal";
+import { Layers, BookOpen, CalendarDays } from "lucide-react";
+import "./flashcards.css";
 
 export default function Flashcards() {
-  // deck state
-  const [decks, setDecks] = useState([]);
-  const [selectedDeck, setSelectedDeck] = useState(null);
+  const { decks, loading, fetchDecks, createDeck } =
+    useFlashcards();
 
-  // flashcard state
-  const [cards, setCards] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  // create deck form
-  const [deckTitle, setDeckTitle] = useState("");
-  const [deckDescription, setDeckDescription] = useState("");
-
-  // create flashcard form
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-
-  // load decks on page load
   useEffect(() => {
     fetchDecks();
   }, []);
 
-  const fetchDecks = async () => {
-    try {
-      const res = await getDecks();
-      setDecks(res.data);
-    } catch (err) {
-      console.error("Failed to fetch decks");
-    }
+  const handleCreate = async (data) => {
+    await createDeck(data);
+    setShowModal(false);
   };
 
-  // create deck
-  const handleCreateDeck = async (e) => {
-    e.preventDefault();
-    if (!deckTitle.trim()) return;
+  // ===== Stats =====
+  const totalDecks = decks.length;
 
-    try {
-      await createDeck({
-        title: deckTitle,
-        description: deckDescription,
-      });
-      setDeckTitle("");
-      setDeckDescription("");
-      fetchDecks();
-    } catch (err) {
-      console.error("Failed to create deck");
-    }
-  };
+  // total cards is sum of all flashcards in all decks
+  const totalCards = decks.reduce(
+    (sum,deck)=>sum + (deck.cardCount || 0),
+    0
+  );
 
-  // open deck
-  const handleDeckClick = async (deck) => {
-    setSelectedDeck(deck);
-    try {
-      const res = await getCardsByDeck(deck._id);
-      setCards(res.data);
-    } catch (err) {
-      console.error("Failed to fetch cards");
-    }
-  };
-
-  // create flashcard
-  const handleCreateCard = async (e) => {
-    e.preventDefault();
-    if (!question.trim() || !answer.trim()) return;
-
-    try {
-      await createCard({
-        question,
-        answer,
-        deckId: selectedDeck._id, // ✅ FIXED
-      });
-      setQuestion("");
-      setAnswer("");
-      const res = await getCardsByDeck(selectedDeck._id);
-      setCards(res.data);
-    } catch (err) {
-      console.error("Failed to create flashcard");
-    }
-  };
+  const thisWeek = decks.filter((deck) => {
+    const created = new Date(deck.createdAt);
+    const now = new Date();
+    return now - created < 7 * 24 * 60 * 60 * 1000;
+  }).length;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Flashcards</h1>
+    <div className="flashcards-page">
 
-      {/* ================= DECK VIEW ================= */}
-      {!selectedDeck && (
-        <>
-          <h2>Create Deck</h2>
+      {/* ===== Header ===== */}
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Flashcards</h1>
+          <p className="page-subtitle">
+            Create decks, add flashcards, and test your knowledge
+          </p>
+        </div>
+      </div>
 
-          <form onSubmit={handleCreateDeck} style={{ marginBottom: "20px" }}>
-            <input
-              type="text"
-              placeholder="Deck title"
-              value={deckTitle}
-              onChange={(e) => setDeckTitle(e.target.value)}
-            />
-            <br />
-            <input
-              type="text"
-              placeholder="Description (optional)"
-              value={deckDescription}
-              onChange={(e) => setDeckDescription(e.target.value)}
-            />
-            <br />
-            <button type="submit">Create Deck</button>
-          </form>
+      {/* ===== Stats ===== */}
+      <div className="flashcard-stats">
+        <StatCard
+          icon={<Layers size={18} />}
+          title="Total Decks"
+          value={totalDecks}
+          subtitle="Your study collections"
+        />
 
-          <h2>Your Decks</h2>
-          {decks.length === 0 && <p>No decks yet</p>}
+        <StatCard
+          icon={<BookOpen size={18} />}
+          title="Total Cards"
+          value={totalCards}
+          subtitle="All flashcards combined"
+        />
 
-          {decks.map((deck) => (
-            <FlashcardDeck
-              key={deck._id}
-              deck={deck}
-              onClick={() => handleDeckClick(deck)}
-            />
-          ))}
-        </>
+        <StatCard
+          icon={<CalendarDays size={18} />}
+          title="This Week"
+          value={thisWeek}
+          subtitle="New decks created"
+        />
+      </div>
+
+      {/* ===== Main Grid ===== */}
+      <div className="flashcard-grid">
+
+        {/* LEFT SIDE */}
+        <div className="flashcard-left">
+          <div className="flashcard-card">
+            <div className="deck-header">
+              <h3>Your Decks</h3>
+  
+              <button
+                className="primary-btn small"
+                onClick={() => setShowModal(true)}
+              >
+                + Create Deck
+              </button>
+            </div>
+
+            {loading && <Loader text="Loading decks..." />}
+
+            {!loading && decks.length === 0 && (
+              <EmptyState
+                title="No decks yet"
+                description="Create your first flashcard deck to start studying."
+              />
+            )}
+
+            <div className="deck-list">
+              {decks.map((deck) => (
+                <DeckCard key={deck._id} deck={deck} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="flashcard-right">
+
+          <div className="flashcard-card side-card">
+            <h3>Study Tip</h3>
+            <p>
+              Review your flashcards within 24 hours to improve
+              memory retention.
+            </p>
+          </div>
+
+          <div className="flashcard-card side-card">
+            <h3>How It Works</h3>
+            <ul>
+              <li>Create a deck</li>
+              <li>Add question & answer</li>
+              <li>Flip to reveal answer</li>
+              <li>Repeat for mastery</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ===== Modal ===== */}
+      {showModal && (
+        <Modal
+          title="Create New Deck"
+          onClose={() => setShowModal(false)}
+        >
+          <DeckForm
+            onSubmit={handleCreate}
+            onCancel={() => setShowModal(false)}
+          />
+        </Modal>
       )}
+    </div>
+  );
+}
 
-      {/* ================= FLASHCARD VIEW ================= */}
-      {selectedDeck && (
-        <>
-          <button onClick={() => setSelectedDeck(null)}>← Back</button>
-          <h2>{selectedDeck.title}</h2>
-
-          <h3>Create Flashcard</h3>
-          <form onSubmit={handleCreateCard} style={{ marginBottom: "20px" }}>
-            <input
-              type="text"
-              placeholder="Question"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
-            <br />
-            <input
-              type="text"
-              placeholder="Answer"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-            />
-            <br />
-            <button type="submit">Add Flashcard</button>
-          </form>
-
-          {cards.length === 0 && <p>No flashcards yet</p>}
-
-          {cards.map((card) => (
-            <FlashCard key={card._id} card={card} />
-          ))}
-        </>
-      )}
+function StatCard({ icon, title, value, subtitle }) {
+  return (
+    <div className="stat-card">
+      <div className="stat-header">
+        {icon}
+        <span>{title}</span>
+      </div>
+      <h2>{value}</h2>
+      <p>{subtitle}</p>
     </div>
   );
 }

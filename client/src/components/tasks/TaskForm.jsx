@@ -1,51 +1,76 @@
 import { useState } from "react";
-import './task.css'
+import "./task.css";
 
-export default function TaskForm({onSubmit,initialData,onCancel}){
-    const[title,setTitle]=useState(initialData?.title || "");
-    const[loading,setLoading]=useState(false);
+export default function TaskForm({ onSubmit, initialData, onCancel }) {
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [dueDate, setDueDate] = useState(
+    initialData?.dueDate
+      ? initialData.dueDate.split("T")[0]
+      : ""
+  );
+  const [loading, setLoading] = useState(false);
 
-    const handleSubmit=async(e)=>{
-        e.preventDefault();
-        if(!title.trim()) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title.trim()) return;
 
-        setLoading(true);
-        try{
-            await onSubmit({title});
-            setTitle("");
-            onCancel?.();
-        }finally{
-            setLoading(false);
-        }
-    };
+    setLoading(true);
+    try {
+      await onSubmit({
+        title,
+        dueDate,
+      });
 
-    return(
-        <form className="task-form" onSubmit={handleSubmit}>
-            <input type="text"
-            className="task-input"
-            placeholder="Add a new task..."
-            value={title}
-            onChange={(e)=>setTitle(e.target.value)} />
+      setTitle("");
+      setDueDate("");
+      onCancel?.();
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            <button
-            type="submit"
-            className="task-submit"
-            disabled={loading}>
-                {loading
-                ?"Saving..."
-                :initialData
-                ?"Update"
-                :"Add"}
-            </button>
+  return (
+    <form className="task-form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="task-input"
+        placeholder="Add a new task..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
 
-            {onCancel && (
-                <button
-                type="button"
-                className="task-cancel"
-                onClick={onCancel}>
-                    Cancel
-                </button>             
-            )}
-        </form>
-    )
+      <input
+        type="date"
+        className="task-date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+        required
+        autoFocus
+      />
+
+      <div className="task-form-actions">
+        <button
+          type="submit"
+          className="primary-btn"
+          disabled={loading}
+        >
+          {loading
+            ? "Saving..."
+            : initialData
+            ? "Update"
+            : "Add"}
+        </button>
+
+        {onCancel && (
+          <button
+            type="button"
+            className="secondary-btn"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
+    </form>
+  );
 }

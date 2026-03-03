@@ -3,30 +3,42 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ProtectedLayout from "./components/common/ProtectedLayout";
 
-// Pages
+// User Pages
 import Dashboard from "./pages/dashboard/Dashboard";
 import Tasks from "./pages/tasks/Tasks";
 import Notes from "./pages/notes/Notes";
 import Flashcards from "./pages/flashcards/Flashcards";
+import DeckStudy from "./pages/flashcards/DeckStudy";
 import Resources from "./pages/resources/Resources";
 import AIPage from "./pages/ai/AIPage";
+
 // Auth pages
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import VerifyOTP from "./pages/auth/VerifyOTP";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import VerifyResetOtp from "./pages/auth/VerifyResetOtp";
+import ResetPassword from "./pages/auth/ResetPassword";
+
+// Admin page
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 export default function App() {
   return (
     <Routes>
-      {/* ========== Public Routes ========== */}
+
+      {/* ================= PUBLIC ROUTES ================= */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
-      {/* ========== Protected Routes ========== */}
+      {/* ================= USER ROUTES ================= */}
       <Route
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["student", "admin"]}>
             <ProtectedLayout />
           </ProtectedRoute>
         }
@@ -35,9 +47,22 @@ export default function App() {
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="/flashcards" element={<Flashcards />} />
+        <Route path="/flashcards/:deckId" element={<DeckStudy/>}/>
         <Route path="/resources" element={<Resources />} />
         <Route path="/ai-chat" element={<AIPage />} />
       </Route>
+
+      {/* ================= ADMIN ROUTES ================= */}
+      <Route
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <ProtectedLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Route>
+
     </Routes>
   );
 }

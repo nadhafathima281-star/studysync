@@ -9,6 +9,7 @@ const{
     sendOtp,
     verifyOtp,
     forgotPassword,
+    verifyResetOtp,
     resetPassword,
     refreshAccessToken,
     logoutUser,
@@ -34,6 +35,9 @@ router.post('/verify-otp',verifyOtp)
 
 // forgot-password
 router.post('/forgot-password',forgotPassword)
+
+// verify forgot password otp and redirect to reset password
+router.post('/verify-reset-otp',verifyResetOtp)
 
 // reset-password
 router.post('/reset-password',resetPassword)

@@ -9,6 +9,9 @@ import { Toaster } from "react-hot-toast";
 import { TaskProvider } from "./context/TaskContext";
 import { NoteProvider } from "./context/NoteContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { FlashcardProvider } from "./context/FlashcardContext";
+import { ResourceProvider } from "./context/ResourceContext";
+import { SearchProvider } from "./context/SearchContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -17,8 +20,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <AuthProvider>
           <TaskProvider>
             <NoteProvider>
-              <App />
-              <Toaster position="top-right" />
+              <FlashcardProvider>
+                <ResourceProvider>
+                <SearchProvider>
+                    <App />
+                    <Toaster position="top-right" />
+                </SearchProvider>
+                </ResourceProvider>
+              </FlashcardProvider>
             </NoteProvider>
           </TaskProvider> 
         </AuthProvider>

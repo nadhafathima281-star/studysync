@@ -1,111 +1,137 @@
-const Note=require('../models/Note')
+const Note = require("../models/Note");
 
-// CREATE NOTE
-const createNote=async(req,res)=>{
-    try{
-        const{title,content,tags}=req.body
+/* ===============================
+   CREATE NOTE
+================================ */
+const createNote = async (req, res) => {
+  try {
+    const { title, content, subject } = req.body;
 
-        // basic validation
-        if(!title || !content){
-            return res.status(400).json({message:'Title and content are required'})
-        }
-
-        const note=await Note.create({
-            user:req.user.id,  //from JWT (auth middleware)
-            title,
-            content,
-            tags,
-        })
-
-        res.status(201).json(note) 
-    }catch(error){
-        res.status(500).json({message:'Failed to create note'})
+    // Validation
+    if (!title || !content || !subject) {
+      return res.status(400).json({
+        message: "Title, content, and subject are required",
+      });
     }
-}
 
+    const note = await Note.create({
+      user: req.user.id, // from auth middleware
+      title,
+      content,
+      subject,
+    });
 
-// GET ALL NOTES (USER-SPECIFIC)
-const getNotes=async(req,res)=>{
-    try{
-        const notes=await Note.find({user:req.user.id}).sort({
-            createdAt:-1,
-        })
+    res.status(201).json(note);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to create note",
+    });
+  }
+};
 
-        res.json(notes)
-    }catch(error){
-        res.status(500).json({message:'Failed to fetch notes'})
+/* ===============================
+   GET ALL NOTES (USER-SPECIFIC)
+================================ */
+const getNotes = async (req, res) => {
+  try {
+    const notes = await Note.find({
+      user: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.json(notes);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch notes",
+    });
+  }
+};
+
+/* ===============================
+   GET SINGLE NOTE
+================================ */
+const getNoteById = async (req, res) => {
+  try {
+    const note = await Note.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        message: "Note not found",
+      });
     }
-}
 
+    res.json(note);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch note",
+    });
+  }
+};
 
-// GET SINGLE NOTE BY ID (USER-SPECIFIC)
-const getNoteById=async(req,res)=>{
-    try{
-        const note=await Note.findOne({
-            _id:req.params.id,
-            user:req.user.id,
-        })
+/* ===============================
+   UPDATE NOTE
+================================ */
+const updateNote = async (req, res) => {
+  try {
+    const note = await Note.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
-        if(!note){
-            return res.status(404).json({message:'Note not found'})
-        }
-
-        res.json(note)
-    }catch(error){
-        res.status(500).json({message:'Failed to fetch note'})
+    if (!note) {
+      return res.status(404).json({
+        message: "Note not found",
+      });
     }
-}
 
+    const { title, content, subject } = req.body;
 
-//UPDATE NOTE
-const updateNote=async(req,res)=>{
-    try{
-        const note=await Note.findOne({
-            _id:req.params.id,
-            user:req.user.id,
-        })
+    if (title !== undefined) note.title = title;
+    if (content !== undefined) note.content = content;
+    if (subject !== undefined) note.subject = subject;
 
-        if(!note){
-            return res.status(404).json({message:'Note not found'})
-        }
+    await note.save();
 
-        const{title,content,tags}=req.body
+    res.json(note);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update note",
+    });
+  }
+};
 
-        if(title !== undefined) note.title=title
-        if(content !== undefined) note.content=content
-        if(tags !== undefined) note.tags=tags
+/* ===============================
+   DELETE NOTE
+================================ */
+const deleteNote = async (req, res) => {
+  try {
+    const note = await Note.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
-        await note.save()
-
-        res.json(note)
-    }catch(error){
-        res.status(500).json({message:'Failed to update note'})
+    if (!note) {
+      return res.status(404).json({
+        message: "Note not found",
+      });
     }
-}
 
+    res.json({
+      message: "Note deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to delete note",
+    });
+  }
+};
 
-//DELETE NOTE
-const deleteNote=async(req,res)=>{
-    try{
-        const note=await Note.findOneAndDelete({
-            _id:req.params.id,
-            user:req.user.id,
-        })
-
-        if(!note){
-            return res.status(404).json({message:'Note not found'})
-        }
-
-        res.json({message:'Note deleted successfully'})
-    }catch(error){
-        res.status(500).json({message:'Failed to delete note'})
-    }
-}
-
-module.exports={
-    createNote,
-    getNotes,
-    getNoteById,
-    updateNote,
-    deleteNote,
-}
+module.exports = {
+  createNote,
+  getNotes,
+  getNoteById,
+  updateNote,
+  deleteNote,
+};

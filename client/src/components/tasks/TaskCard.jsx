@@ -1,29 +1,60 @@
-import { FiTrash2,FiEdit } from 'react-icons/fi'
-import './task.css'
+import {
+  Trash2,
+  Pencil,
+  CheckCircle,
+  Circle,
+  Calendar,
+} from "lucide-react";
+import "./task.css";
 
-export default function TaskCard({task,onDelete,onEdit}){
-    return(
-        <div className='task-card'>
-            <div className='task-content'>
-                <h4 className='task-title'>{task.title}</h4>
+export default function TaskCard({ task, onDelete, onEdit, onToggle }) {
+  const isCompleted = task.status === "completed";
+
+  return (
+    <div className={`task-card ${isCompleted ? "completed" : ""}`}>
+      <div className="task-left">
+        <button
+          className={`task-check ${isCompleted ? "checked" : ""}`}
+          onClick={() => onToggle(task)}
+        >
+          {isCompleted ? (
+            <CheckCircle size={20} />
+          ) : (
+            <Circle size={20} />
+          )}
+        </button>
+
+        <div className="task-content">
+          <h4 className={`task-title ${isCompleted ? "done" : ""}`}>
+            {task.title}
+          </h4>
+
+          {task.dueDate && (
+            <div className="task-meta">
+              <Calendar size={14} />
+              <span>
+                {new Date(task.dueDate).toLocaleDateString()}
+              </span>
             </div>
-
-            <div className='task-actions'>
-                <button
-                className='task-btn edit'
-                onClick={()=>onEdit(task)}
-                >
-                    <FiEdit/>
-                </button>
-
-                <button
-                className='task-btn delete'
-                onClick={()=>onDelete(task._id)}
-                >
-                    <FiTrash2/>
-                </button>
-            </div>
+          )}
         </div>
-    )
-}
+      </div>
 
+      <div className="task-actions">
+        <button
+          className="icon-btn"
+          onClick={() => onEdit(task)}
+        >
+          <Pencil size={16} />
+        </button>
+
+        <button
+          className="icon-btn delete"
+          onClick={() => onDelete(task._id)}
+        >
+          <Trash2 size={16} />
+        </button>
+      </div>
+    </div>
+  );
+}

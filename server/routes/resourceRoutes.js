@@ -1,17 +1,18 @@
 const express = require("express");
 const router = express.Router();
-
-// auth middleware
 const auth = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware"); // your multer file
 const resourceController = require("../controllers/resourceController");
 
-// create resource
-router.post("/", auth, resourceController.createResource);
+router.post(
+  "/",
+  auth,
+  upload.single("file"),
+  resourceController.createResource
+);
 
-// get all resources
 router.get("/", auth, resourceController.getResources);
 
-// delete resource
 router.delete("/:id", auth, resourceController.deleteResource);
 
 module.exports = router;

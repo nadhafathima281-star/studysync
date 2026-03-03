@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
-import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi";
+import { FiUser, FiMail, FiPhone, FiLock, FiEye, FiEyeOff} from "react-icons/fi";
 import AppIcon from "../../assets/studysync-icon.svg";
 import "./auth.css";
 import ThemeToggle from "../../components/common/ThemeToggle";
@@ -17,6 +17,7 @@ export default function Register() {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -135,21 +136,30 @@ export default function Register() {
         </div>
 
         <div className="form-group">
-          <div className="input-wrapper">
-            <span className="input-icon"><FiLock /></span>
-            <input
-              className={`auth-input ${errors.password ? "error" : ""}`}
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-            />
-          </div>
-          {errors.password && (
-            <span className="input-error">{errors.password}</span>
-          )}
-        </div>
+  <div className="input-wrapper">
+    <span className="input-icon"><FiLock /></span>
+
+    <input
+      className={`auth-input ${errors.password ? "error" : ""}`}
+      type={showPassword ? "text" : "password"}
+      name="password"
+      placeholder="Password"
+      value={form.password}
+      onChange={handleChange}
+    />
+
+    <span
+      className="toggle-password"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <FiEyeOff /> : <FiEye />}
+    </span>
+  </div>
+
+  {errors.password && (
+    <span className="input-error">{errors.password}</span>
+  )}
+</div>
 
         <button className="auth-btn" disabled={loading}>
           {loading ? "Registering..." : "Create account"}

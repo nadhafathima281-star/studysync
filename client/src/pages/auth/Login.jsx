@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
-import { FiMail, FiLock } from "react-icons/fi";
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import AppIcon from "../../assets/studysync-icon.svg";
 import "./auth.css";
 import ThemeToggle from "../../components/common/ThemeToggle";
@@ -11,6 +11,7 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -86,28 +87,37 @@ export default function Login() {
         </div>
 
         <div className="form-group">
-          <div className="input-wrapper">
-            <span className="input-icon"><FiLock /></span>
-            <input
-              className={`auth-input ${errors.password ? "error" : ""}`}
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-            />
-          </div>
-          {errors.password && (
-            <span className="input-error">{errors.password}</span>
-          )}
-        </div>
+  <div className="input-wrapper">
+    <span className="input-icon"><FiLock /></span>
+
+    <input
+      className={`auth-input ${errors.password ? "error" : ""}`}
+      type={showPassword ? "text" : "password"}
+      name="password"
+      placeholder="Password"
+      value={form.password}
+      onChange={handleChange}
+    />
+
+    <span
+      className="toggle-password"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <FiEyeOff /> : <FiEye />}
+    </span>
+  </div>
+
+  {errors.password && (
+    <span className="input-error">{errors.password}</span>
+  )}
+</div>
 
         <div className="auth-row">
           <Link to="/forgot-password">Forgot password?</Link>
         </div>
 
         <button className="auth-btn" disabled={loading}>
-          {loading ? "Submitting..." : "Login"}
+          {loading ? "Sending OTP..." : "Continue"}
         </button>
 
         <p className="auth-footer">

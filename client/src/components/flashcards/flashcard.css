@@ -1,0 +1,313 @@
+/* ==================================================
+   SHARED CARD BASE
+================================================== */
+
+.card-base {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  transition: 0.2s ease;
+}
+
+.card-base:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* ==============================
+   DECK CARD
+============================== */
+
+.deck-card {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border:1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.deck-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent);
+}
+
+/* ==============================
+   TOP SECTION
+============================== */
+
+.deck-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+}
+
+.deck-icon {
+  background: rgba(99, 102, 241, 0.15);
+  padding: 10px;
+  border-radius: 12px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.deck-info {
+  flex: 1;
+}
+
+.deck-title {
+  font-size: 1.15rem;
+  font-weight: 650;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+}
+
+.deck-description {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 80%;
+}
+
+/* Delete button aligned right */
+.deck-delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: 0.2s ease;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.deck-delete:hover {
+  color: var(--error);
+  transform: scale(1.1);
+}
+
+/* ==============================
+   BOTTOM META SECTION
+============================== */
+
+.deck-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.deck-count {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent);
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.deck-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+/* ===== Flashcard & Deck Forms (Modal Style Upgrade) ===== */
+
+.flashcard-form,
+.deck-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Labels */
+.flashcard-form label,
+.deck-form label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+/* Inputs & Textareas */
+.deck-input {
+  width: 95%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+/* Smooth focus effect */
+.deck-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  outline: none;
+}
+
+/* Textarea resize control */
+.deck-input textarea,
+textarea.deck-input {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.primary-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* ==================================================
+   FLASHCARD VIEWER
+================================================== */
+
+.flashcard-static {
+  padding: 50px 40px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.flashcard-static.clickable {
+  cursor: pointer;
+}
+
+.flashcard-static:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.card-question {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.card-answer {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.card-label {
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.hint-text {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  opacity: 0.4;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px);}
+  to { opacity: 1; transform: translateY(0); }
+}
+.flashcard-static > * {
+  animation: fadeIn 0.2s ease;
+}
+
+/* ===============================
+   STUDY CONTROLS (Premium Style)
+================================ */
+
+.study-controls {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover Effect */
+.nav-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Disabled State */
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Progress Text */
+.card-progress {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.6;
+  min-width: 60px;
+  text-align: center;
+}/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 768px) {
+  .flashcard-viewer {
+    height: 240px;
+  }
+
+  .flashcard-front,
+  .flashcard-back {
+    padding: 20px;
+  }
+}

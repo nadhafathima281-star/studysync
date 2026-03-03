@@ -13,6 +13,7 @@ const resourceRoutes=require('./routes/resourceRoutes')
 const adminRoutes=require('./routes/adminRoutes')
 const reportRoutes=require('./routes/reportRoutes')
 const aiRoutes=require('./routes/aiRoutes')
+const dashboardRoutes=require('./routes/dashboardRoutes')
 connectDB(); //  MongoDB connection
 
 const app = express();
@@ -59,6 +60,8 @@ app.use('/api/flashcards',flashcardRoutes)
 // resource routes
 app.use('/api/resources',resourceRoutes)
 
+app.use('/uploads', express.static('uploads')); // serve uploaded files
+
 // admin routes
 app.use('/api/admin',adminRoutes)
 
@@ -67,6 +70,9 @@ app.use('/api/reports',reportRoutes)
 
 // ai routes
 app.use('/api/ai',aiRoutes)
+
+// dashboard routes
+app.use('/api/dashboard',dashboardRoutes)
 
 // get port no from .env ot use 5000 as default
 const PORT = process.env.PORT || 5000;   

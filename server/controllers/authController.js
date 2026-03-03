@@ -210,7 +210,9 @@ const loginUser=async(req,res)=>{
             return res.status(400).json({message:'Invalid credentials'})
         }
 
-       
+user.otp = undefined;
+user.otpExpires = undefined;
+        
 const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
 user.otp = otp;
@@ -227,6 +229,7 @@ await sendEmail({
     <p>Valid for 5 minutes.</p>
   `,
 });
+
 
 res.status(200).json({
   message: "OTP sent to your email",
@@ -302,7 +305,7 @@ const verifyOtp=async(req,res)=>{
         const accessToken=jwt.sign(
             {id:user._id,role:user.role},
             process.env.JWT_SECRET,
-            {expiresIn:'1d'}
+            {expiresIn:'15m'}
         )
 
         const refreshToken=jwt.sign(
@@ -376,39 +379,67 @@ const forgotPassword=async(req,res)=>{
     }
 };
 
+// VERIFY FORGOT PASSWORD OTP
+const verifyResetOtp = async (req, res) => {
+  const { phone, otp } = req.body;
+
+  if (!phone || !otp) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const user = await User.findOne({ phone });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (
+    user.resetOtp !== otp ||
+    user.resetOTPExpiry < Date.now()
+  ) {
+    return res.status(400).json({ message: "Invalid or expired OTP" });
+  }
+
+  res.json({ message: "OTP verified successfully" });
+};
+
 // RESET PASSWORD USING SMS OTP
-const resetPassword=async(req,res)=>{
-    try{
-        const{phone,otp,newPassword}=req.body;
+const resetPassword = async (req, res) => {
+  try {
+    const { phone, newPassword } = req.body;
 
-        if(!phone || !otp || !newPassword){
-            return res.status(400).json({message:"All fields are required"});
-        }
-
-        const user=await User.findOne({
-            phone,
-            resetOtp:otp,
-            resetOTPExpiry:{$gt:Date.now()},
-        });
-
-        if(!user){
-            return res.status(400).json({message:"Invalid or expired OTP"});
-        }
-
-        const hashedPassword=await bcrypt.hash(newPassword,10);
-        user.password=hashedPassword;
-
-        user.resetOtp=undefined;
-        user.resetOTPExpiry=undefined;
-
-        await user.save();
-
-        res.json({message:"Password reset successful"});
-    }catch(error){
-        console.error(error);
-        res.status(500).json({message:"Failed to reset password"});
-        
+    if (!phone || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        message:
+          "Password must be at least 6 characters and contain at least one letter and one number",
+      });
+    }
+
+    const user = await User.findOne({ phone });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    // clear OTP after successful reset
+    user.resetOtp = undefined;
+    user.resetOTPExpiry = undefined;
+
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to reset password" });
+  }
 };
 
 // REFRESH ACCESS TOKEN
@@ -484,6 +515,7 @@ module.exports={
     sendOtp,
     verifyOtp,
     forgotPassword,
+    verifyResetOtp,
     resetPassword,
     refreshAccessToken,
     logoutUser

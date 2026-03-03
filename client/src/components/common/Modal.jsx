@@ -1,36 +1,26 @@
-import "./modal.css"
+import { X } from "lucide-react";
+import "./modal.css";
 
-export default function Modal({
-    title,
-    children,
-    onClose,
-    footer,
-}){
-    return(
-        <div className="modal-backdrop" onClick={onClose}>
-            <div
-                className="modal-card"
-                onClick={(e)=>e.stopPropagation()}
-            >
-                {title && (
-                    <div className="modal-header">
-                        <h3>{title}</h3>
-                        <button className="modal-close" onClick={onClose}>
-                            x
-                        </button>
-                    </div>
-                )}
+export default function Modal({ title, subtitle, children, onClose }) {
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div
+        className="modal-card"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="modal-header">
+          <div>
+            <h2>{title}</h2>
+            {subtitle && <p className="modal-subtitle">{subtitle}</p>}
+          </div>
 
-                <div className="modal-body">
-                    {children}
-                </div>
-
-                {footer && (
-                    <div className="modal-footer">
-                        {footer}
-                    </div>
-                )}
-            </div>
+          <button className="modal-close" onClick={onClose}>
+            <X size={20} />
+          </button>
         </div>
-    )
+
+        <div className="modal-body">{children}</div>
+      </div>
+    </div>
+  );
 }

@@ -1,16 +1,14 @@
-const multer=require("multer")
-const storage=multer.memoryStorage()
+const multer = require("multer");
 
-const upload=multer({
-    storage,
-    limits:{fileSize:2*1024*1025},//2mb
-    fileFilter:(req,file,cb)=>{
-        if(file.mimetype==="text/plain"){
-            cb(null,true);
-        }else{
-            cb(new Error("Only .txt files are allowed"));
-        }
-    }
-})
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-module.exports=upload
+const upload = multer({ storage });
+
+module.exports = upload;

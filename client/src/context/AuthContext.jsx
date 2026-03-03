@@ -5,6 +5,9 @@ import {
   verifyOtp,
   refreshToken,
   logoutUser,
+  forgotPassword,
+  verifyResetOtp as verifyResetOtpApi,
+  resetPassword,
 } from "../api/authApi";
 
 const AuthContext = createContext(null);
@@ -63,6 +66,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const forgot = (data) => forgotPassword(data);
+
+  const verifyResetOtp = (data) => verifyResetOtpApi(data);
+
+  const reset = (data) => resetPassword(data);
+
   return (
     <AuthContext.Provider
       value={{
@@ -72,6 +81,9 @@ export const AuthProvider = ({ children }) => {
         login,
         verifyOTP,
         logout,
+        forgot,
+        verifyResetOtp,
+        reset,
       }}
     >
       {children}

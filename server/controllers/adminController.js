@@ -1,7 +1,6 @@
 const User=require("../models/User");
 const Note=require("../models/Note");
 const Task=require("../models/Task");
-const flashcard=require("../models/Flashcard");
 const FlashcardDeck=require("../models/FlashcardDeck");
 const Resource=require("../models/Resource");
 const Flashcard = require("../models/Flashcard");

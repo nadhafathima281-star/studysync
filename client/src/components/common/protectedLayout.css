@@ -1,27 +1,27 @@
-.app-layout{
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: var(--bg);
-}
-.layout-body{
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-}
-.main-content{
-    padding: 24px;
-    background: var(--surface);
-    flex: 1;
-    overflow-y: auto;
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
 }
 
+.layout-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
 
-@media(max-width:768px){
-    .layout-body{
-        flex-direction: column;
-    }
-    .main-content{
-        padding: 16px;
-    }
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background: var(--surface);
+  overflow-y: auto;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 18px;
+  }
 }

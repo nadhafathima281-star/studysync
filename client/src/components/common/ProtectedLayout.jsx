@@ -1,19 +1,26 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Navbar from "./Navbar"
+import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import "./protectedLayout.css"
+import "./protectedLayout.css";
 
-export default function ProtectedLayout(){
-    return(
-       <div className="app-layout">
-        <Navbar/>
+export default function ProtectedLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-        <div className="layout-body">
-            <Sidebar/>
-            <main className="main-content">
-                <Outlet/>
-            </main>
-        </div>
-       </div>
-    )
+  return (
+    <div className="app-layout">
+      <Navbar setSidebarOpen={setSidebarOpen} />
+
+      <div className="layout-body">
+        <Sidebar
+          isOpen={sidebarOpen}
+          setIsOpen={setSidebarOpen}
+        />
+
+        <main className="main-content">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
 }

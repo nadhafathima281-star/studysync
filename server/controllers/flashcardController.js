@@ -1,147 +1,217 @@
-const Flashcard=require("../models/Flashcard")
-const FlashcardDeck=require("../models/FlashcardDeck")
+const Flashcard = require("../models/Flashcard");
+const FlashcardDeck = require("../models/FlashcardDeck");
+const mongoose = require("mongoose");
 
-// DECK CONTROLLERS
 
-// create a new flashcard deck
-// route:POST /api/flashcards/decks
-exports.createDeck=async(req,res)=>{
-    try{
-        const{title,description}=req.body;
-        // extract deck in db
-        const deck=await FlashcardDeck.create({
-            title,
-            description,
-            user:req.user.id, //user id comes from auth middleware
-        });
+// =====================================================
+// ================== DECK CONTROLLERS =================
+// =====================================================
 
-        // send created deck as response
-        res.status(201).json(deck);
-    }catch(error){
-        res.status(500).json({message:"Failed to create deck"});
+
+// CREATE A NEW FLASHCARD DECK
+// Route: POST /api/flashcards/decks
+exports.createDeck = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+
+    // Basic validation
+    if (!title || !title.trim()) {
+      return res.status(400).json({ message: "Deck title is required" });
     }
-};
 
-// get all decks created by the logged-in user
-// route:GET /api/flashcards/decks
-exports.getDecks=async(req,res)=>{
-    try{
-        // find decks belonging to the user
-        const decks=await FlashcardDeck.find({user:req.user.id})
-        .sort({createdAt:-1}); //latest decks first
+    // Create deck linked to logged-in user
+    const deck = await FlashcardDeck.create({
+      title,
+      description: description || "",
+      user: req.user.id, // comes from auth middleware
+    });
 
-        res.json(decks);
-    }catch(error){
-        res.status(500).json({message:'Failed to fetch decks'});
-    }
-};
-
-// delete a deck and all  flashcards inside it
-// route: DELETE /api/flashcards/decks/:id
-exports.deleteDeck=async(req,res)=>{
-    try{
-        // find and delete deck only if it belongs to user
-        const deck=await FlashcardDeck.findOneAndDelete({
-            _id:req.params.id,
-            user:req.user.id,
-        });
-
-        // if deck not found ,return error
-        if(!deck){
-            return res.status(404).json({message:"Deck not found"});
-        }
-
-        // delete all flashcards linked to this deck
-        await Flashcard.deleteMany({deck:deck._id});
-
-        res.json({message:"Deck and flashcards deleted successfully"});
-    }catch(error){
-        res.status(500).json({message:"Failed to delete deck"});
-    }
+    res.status(201).json(deck);
+  } catch (error) {
+    console.error("Create deck error:", error);
+    res.status(500).json({ message: "Failed to create deck" });
+  }
 };
 
 
-// FLASHCARD CONTROLLERS
+// GET ALL DECKS OF LOGGED-IN USER
+// Route: GET /api/flashcards/decks
+exports.getDecks = async (req, res) => {
+  try {
+    const decks = await FlashcardDeck.aggregate([
+      {
+        $match: { user: new mongoose.Types.ObjectId(req.user.id) },
+      },
+      {
+        $lookup: {
+          from: "flashcards",
+          localField: "_id",
+          foreignField: "deck",
+          as: "cards",
+        },
+      },
+      {
+        $addFields: {
+          cardCount: { $size: "$cards" },
+        },
+      },
+      {
+        $project: {
+          cards: 0,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]);
 
-// create a new flashcard inside a deck
-// route: POST /api/flashcards
-exports.createCard=async(req,res)=>{
-    try{
-        // extract card data from current body
-        const{question,answer,deckId}=req.body;
-
-        // create a flashcard in db
-        const card=await Flashcard.create({
-            question,
-            answer,
-            deck:deckId,
-            user:req.user.id, //ensures ownership
-        });
-
-        res.status(201).json(card);
-    }catch(error){
-        res.status(500).json({message:"Failed to create flashcard"});
-    }
+    res.json(decks);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch decks" });
+  }
 };
 
-// get all flashcards of a specific deck
-// route: GET /api/flashcards/deck/:deckId
-exports.getCardsByDeck=async(req,res)=>{
-    try{
-        // find cards by deck id and user id
-        const cards=await Flashcard.find({
-            deck:req.params.deckId,
-            user:req.user.id,
-        }).sort({createdAt:-1});
 
-        res.json(cards);
-    }catch(error){
-        res.status(500).json({message:"Failed to fetch flashcards"});
+// DELETE A DECK + ITS FLASHCARDS
+// Route: DELETE /api/flashcards/decks/:id
+exports.deleteDeck = async (req, res) => {
+  try {
+    // Only delete if deck belongs to user
+    const deck = await FlashcardDeck.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.id,
+    });
+
+    if (!deck) {
+      return res.status(404).json({ message: "Deck not found" });
     }
-};
 
-// update a flashcard (edit question or answer)
-// route : PUT /api/flashcards/:id
-exports.updateCard=async(req,res)=>{
-    try{
-        const{question,answer}=req.body;
+    // Delete all flashcards inside this deck
+    await Flashcard.deleteMany({ deck: deck._id });
 
-        // finf flashcard and update only id=f owned by user
-        const card=await Flashcard.findOneAndUpdate(
-            {_id:req.params.id, user:req.user.id},
-            {question,answer},
-            // {new:true} return updated document
-        );
-
-        if(!card){
-            return res.status(404).json({message:"Flashcard not found"});
-        }
-
-        res.json(card);
-    }catch(error){
-        res.status(500).json({message:"Failed to update flashcard"});
-    }
-};
-
-// delete a flashcard
-// route : DELETE /api/flashcards/:id
-exports.deleteCard=async(req,res)=>{
-    try{
-        // find and delete card only id it belongs to user
-        const card=await Flashcard.findOneAndDelete({
-            _id:req.params.id,
-            user:req.user.id,
-        });
-
-        if(!card){
-            return res.status(404).json({message:"Flashcard not found"});
-        }
-
-        res.json({message:"Flashcard deleted successfully"});
-    }catch(error){
-        res.status(500).json({message:"Failed to delete flashcard"});
-    }
+    res.json({ message: "Deck and flashcards deleted successfully" });
+  } catch (error) {
+    console.error("Delete deck error:", error);
+    res.status(500).json({ message: "Failed to delete deck" });
+  }
 };
 
 
 
+// =====================================================
+// ================= FLASHCARD CONTROLLERS =============
+// =====================================================
+
+
+// CREATE A FLASHCARD
+// Route: POST /api/flashcards
+exports.createCard = async (req, res) => {
+  try {
+    const { question, answer, deckId } = req.body;
+
+    // Basic validation
+    if (!question || !answer || !deckId) {
+      return res.status(400).json({
+        message: "Question, answer and deckId are required",
+      });
+    }
+
+    // Verify that deck belongs to logged-in user
+    const deck = await FlashcardDeck.findOne({
+      _id: deckId,
+      user: req.user.id,
+    });
+
+    if (!deck) {
+      return res.status(404).json({ message: "Deck not found" });
+    }
+
+    // Create flashcard
+    const card = await Flashcard.create({
+      question,
+      answer,
+      deck: deckId,
+      user: req.user.id,
+    });
+
+    res.status(201).json(card);
+  } catch (error) {
+    console.error("Create flashcard error:", error);
+    res.status(500).json({ message: "Failed to create flashcard" });
+  }
+};
+
+
+// GET ALL FLASHCARDS OF A DECK
+// Route: GET /api/flashcards/deck/:deckId
+exports.getCardsByDeck = async (req, res) => {
+  try {
+    const deckId = req.params.deckId;
+
+    // Verify deck ownership
+    const deck = await FlashcardDeck.findOne({
+      _id: deckId,
+      user: req.user.id,
+    });
+
+    if (!deck) {
+      return res.status(404).json({ message: "Deck not found" });
+    }
+
+    // Fetch cards
+    const cards = await Flashcard.find({
+      deck: deckId,
+      user: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.json(cards);
+  } catch (error) {
+    console.error("Fetch flashcards error:", error);
+    res.status(500).json({ message: "Failed to fetch flashcards" });
+  }
+};
+
+
+// UPDATE A FLASHCARD
+// Route: PUT /api/flashcards/:id
+exports.updateCard = async (req, res) => {
+  try {
+    const { question, answer } = req.body;
+
+    const card = await Flashcard.findOneAndUpdate(
+      { _id: req.params.id, user: req.user.id },
+      { question, answer },
+      { new: true } // IMPORTANT: return updated document
+    );
+
+    if (!card) {
+      return res.status(404).json({ message: "Flashcard not found" });
+    }
+
+    res.json(card);
+  } catch (error) {
+    console.error("Update flashcard error:", error);
+    res.status(500).json({ message: "Failed to update flashcard" });
+  }
+};
+
+
+// DELETE A FLASHCARD
+// Route: DELETE /api/flashcards/:id
+exports.deleteCard = async (req, res) => {
+  try {
+    const card = await Flashcard.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.id,
+    });
+
+    if (!card) {
+      return res.status(404).json({ message: "Flashcard not found" });
+    }
+
+    res.json({ message: "Flashcard deleted successfully" });
+  } catch (error) {
+    console.error("Delete flashcard error:", error);
+    res.status(500).json({ message: "Failed to delete flashcard" });
+  }
+};

@@ -1,72 +1,133 @@
-import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import { useEffect, useMemo, useState } from "react";
+import { useResources } from "../../context/ResourceContext";
+import ResourceCard from "../../components/resources/ResourceCard";
+import ResourceForm from "../../components/resources/ResourceForm";
+import Loader from "../../components/common/Loader";
+import Modal from "../../components/common/Modal";
+import "./resources.css";
 
 export default function Resources() {
-  const [resources, setResources] = useState([]);
-  const [title, setTitle] = useState("");
-  const [link, setLink] = useState("");
-  const [type, setType] = useState("article");
-  const [loading, setLoading] = useState(false);
+  const {
+    resources,
+    loading,
+    fetchResources,
+    createResource,
+    deleteResource,
+  } = useResources();
 
-  const fetchResources = async () => {
-    const res = await api.get("/resources");
-    setResources(res.data);
-  };
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     fetchResources();
   }, []);
 
-  const handleAdd = async (e) => {
-    e.preventDefault();
-    if (!title || !link) return;
+  const filteredResources = useMemo(() => {
+    return resources
+      .filter((r) =>
+        r.title.toLowerCase().includes(search.toLowerCase())
+      )
+      .filter((r) =>
+        filter === "all" ? true : r.type === filter
+      );
+  }, [resources, search, filter]);
 
-    setLoading(true);
-    await api.post("/resources", { title, link, type });
-    setTitle("");
-    setLink("");
-    setLoading(false);
-    fetchResources();
-  };
-
-  const handleDelete = async (id) => {
-    await api.delete(`/resources/${id}`);
-    fetchResources();
+  const stats = {
+    total: resources.length,
+    pdf: resources.filter((r) => r.type === "pdf").length,
+    links: resources.filter((r) => r.link).length,
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Resources</h1>
+    <div className="resources-page">
 
-      <form onSubmit={handleAdd}>
-        <input
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          placeholder="Link"
-          value={link}
-          onChange={(e) => setLink(e.target.value)}
-        />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="article">Article</option>
-          <option value="video">Video</option>
-          <option value="pdf">PDF</option>
-        </select>
-        <button type="submit" disabled={loading}>
-          {loading ? "Adding..." : "Add"}
+      {/* Header */}
+      <div className="resources-header">
+        <div>
+          <h1 className="page-title">Resources</h1>
+          <p className="page-subtitle">
+            Build your personal study library and access it anytime.
+          </p>
+        </div>
+
+        <button
+          className="primary-btn"
+          onClick={() => setShowModal(true)}
+        >
+          + Add Resource
         </button>
-      </form>
+      </div>
 
-      <ul>
-        {resources.map((r) => (
-          <li key={r._id}>
-            <a href={r.link} target="_blank">{r.title}</a>
-            <button onClick={() => handleDelete(r._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      {/* Stats */}
+      <div className="resources-stats">
+        <StatCard title="Total" value={stats.total} />
+        <StatCard title="PDF Files" value={stats.pdf} />
+        <StatCard title="External Links" value={stats.links} />
+      </div>
+
+      {/* Tools */}
+      <div className="resources-tools">
+        <input
+          type="text"
+          placeholder="Search resources..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="all">All</option>
+          <option value="pdf">PDF</option>
+          <option value="video">Video</option>
+          <option value="article">Article</option>
+          <option value="course">Course</option>
+        </select>
+      </div>
+
+      {loading && <Loader text="Loading resources..." />}
+
+      {!loading && filteredResources.length === 0 && (
+        <div className="empty-state">
+          <h3>No resources found</h3>
+          <p>Add or search resources to get started.</p>
+        </div>
+      )}
+
+      {!loading && filteredResources.length > 0 && (
+        <div className="resources-grid">
+          {filteredResources.map((resource) => (
+            <ResourceCard
+              key={resource._id}
+              resource={resource}
+              onDelete={deleteResource}
+            />
+          ))}
+        </div>
+      )}
+
+      {showModal && (
+        <Modal
+          title="Add Resource"
+          onClose={() => setShowModal(false)}
+        >
+          <ResourceForm
+            onSubmit={createResource}
+            onCancel={() => setShowModal(false)}
+          />
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function StatCard({ title, value }) {
+  return (
+    <div className="stat-card">
+      <h4>{title}</h4>
+      <h2>{value}</h2>
     </div>
   );
 }
