@@ -70,8 +70,7 @@ const registerUser=async(req,res)=>{
         )
 
         // verification link
-         const verificationLink = `http://localhost:${process.env.PORT}/api/auth/verify-email/${token}`;
-
+const verificationLink = `${process.env.BACKEND_URL}/api/auth/verify-email/${token}`;           
         // send verification email
         await sendEmail({
             to: emailLower,
