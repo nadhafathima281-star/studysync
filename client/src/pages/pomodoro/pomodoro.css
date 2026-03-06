@@ -1,0 +1,335 @@
+/* ================================= */
+/* PAGE */
+/* ================================= */
+
+.pomodoro-page{
+max-width:900px;
+margin:auto;
+padding:30px;
+}
+
+
+/* ================================= */
+/* HEADER */
+/* ================================= */
+
+.pomodoro-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.pomodoro-header h1{
+margin:0;
+font-size:28px;
+font-weight:600;
+}
+
+.analytics-btn{
+background:var(--surface);
+border:1px solid var(--border);
+color:var(--text-primary);
+padding:8px 16px;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
+}
+
+.analytics-btn:hover{
+background:var(--accent-light);
+}
+
+
+/* ================================= */
+/* TIMER CARD */
+/* ================================= */
+
+.pomodoro-card{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:20px;
+padding:40px;
+text-align:center;
+transition:.3s;
+box-shadow:0 8px 25px rgba(0,0,0,0.06);
+}
+
+.focus-mode{
+box-shadow:0 0 30px rgba(99,102,241,0.35),
+0 0 60px rgba(99,102,241,0.15);
+animation:focusPulse 6s infinite ease-in-out;
+
+}
+@keyframes focusPulse{
+0%{transform:scale(1)}
+50%{transform:scale(1.01)}
+100%{transform:scale(1)}
+}
+
+
+
+/* ================================= */
+/* MODE BUTTONS */
+/* ================================= */
+
+.mode-buttons{
+display:flex;
+justify-content:center;
+gap:12px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.mode-buttons button{
+background:var(--background);
+border:1px solid var(--border);
+color:var(--text-primary);
+padding:8px 18px;
+border-radius:10px;
+cursor:pointer;
+font-size:14px;
+transition:all 0.2s ease;
+}
+
+.mode-buttons button:hover{
+background:rgba(99,102,241,0.08);
+border-color:var(--accent);
+color:var(--accent);
+transform:translateY(-2px);
+box-shadow:0 4px 12px rgba(99,102,241,0.15);
+}
+
+.mode-buttons .active{
+background:linear-gradient(135deg,#6366F1,#4F46E5);
+color:white;
+border:none;
+box-shadow:0 8px 18px rgba(99,102,241,0.35);
+}
+
+
+/* ================================= */
+/* TIMER CIRCLE */
+/* ================================= */
+
+.timer-circle{
+position:relative;
+width:260px;
+height:260px;
+margin:auto;
+}
+
+.timer-circle svg{
+width:100%;
+height:100%;
+filter:drop-shadow(0 8px 20px rgba(99,102,241,0.25));
+}
+.timer-circle svg circle:last-child{
+    filter: drop-shadow(0 0 6px rgba(99,102,241,0.6));
+    transition: stroke-dashoffset 0.8s linear;
+}
+
+.timer-text{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:52px;
+font-weight:700;
+letter-spacing:2px;
+color:var(--text-primary);
+}
+
+
+/* ================================= */
+/* SESSION TEXT */
+/* ================================= */
+
+.session-text{
+margin-top:20px;
+font-size:14px;
+color:var(--text-secondary);
+}
+
+
+/* ================================= */
+/* CONTROLS */
+/* ================================= */
+
+.controls{
+display:flex;
+justify-content:center;
+gap:12px;
+margin-top:25px;
+flex-wrap:wrap;
+}
+
+.start-btn,
+.pause-btn{
+background:var(--accent);
+color:white;
+border:none;
+padding:12px 28px;
+border-radius:12px;
+cursor:pointer;
+font-weight:500;
+transition:.2s;
+}
+
+.start-btn:hover,
+.pause-btn:hover{
+background:var(--accent-hover);
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(99,102,241,0.35);
+}
+
+.reset-btn{
+background:var(--background);
+border:1px solid var(--border);
+color:var(--text-primary);
+padding:12px 22px;
+border-radius:12px;
+cursor:pointer;
+transition:.2s;
+}
+
+.reset-btn:hover{
+background:var(--surface);
+}
+
+
+/* ================================= */
+/* TASK SECTION */
+/* ================================= */
+
+.task-section{
+margin-top:40px;
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:18px;
+padding:25px;
+}
+
+.task-section h3{
+margin-bottom:15px;
+font-size:18px;
+}
+
+
+/* ================================= */
+/* TASK INPUT */
+/* ================================= */
+
+.task-input{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+}
+
+.task-input input{
+flex:1;
+padding:10px 14px;
+border-radius:10px;
+border:1px solid var(--border);
+background:var(--background);
+color:var(--text-primary);
+}
+
+.task-input button{
+background:var(--accent);
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
+}
+
+.task-input button:hover{
+background:var(--accent-hover);
+}
+
+
+/* ================================= */
+/* TASK LIST */
+/* ================================= */
+
+.task-list{
+list-style:none;
+padding:0;
+margin-top:10px;
+}
+
+.task-list li{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid var(--border);
+background:var(--background);
+padding:10px 14px;
+border-radius:10px;
+margin-bottom:10px;
+transition:.2s;
+}
+
+.task-list li:hover{
+background:var(--surface);
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+.task-list button{
+border:none;
+background:none;
+color:var(--text-muted);
+cursor:pointer;
+font-size:16px;
+padding:4px;
+border-radius:6px;
+transition:.2s;
+}
+
+.task-list button:hover{
+background:rgba(239,68,68,0.15);
+color:#ef4444;
+}
+
+
+/* ================================= */
+/* RESPONSIVE */
+/* ================================= */
+
+@media (max-width:768px){
+
+.pomodoro-card{
+padding:30px 20px;
+}
+
+.timer-circle{
+width:210px;
+height:210px;
+}
+
+.timer-text{
+font-size:40px;
+}
+
+.controls{
+flex-direction:column;
+}
+
+.start-btn,
+.pause-btn,
+.reset-btn{
+width:100%;
+}
+
+.task-input{
+flex-direction:column;
+}
+
+.task-input button{
+width:100%;
+}
+
+}

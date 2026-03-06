@@ -55,12 +55,12 @@ export default function NoteForm({ onSubmit, initialData, onCancel }) {
   </div>
 
   <div className="note-form-actions">
-    <button type="button" className="cancel-btn" onClick={onCancel}>
+    <button type="button" className="secondary-btn" onClick={onCancel}>
       Cancel
     </button>
 
-    <button type="submit" className="save-btn">
-      Save Note
+    <button type="submit" className="primary-btn">
+    {loading ? "Saving..." : initialData ? "Update" : "Save"}
     </button>
   </div>
 </form>

@@ -86,7 +86,10 @@ export default function Notes() {
             <h3>Study Notes</h3>
             <button
               className="primary-btn"
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                setEditingNote(null);
+                setShowModal(true);
+              }}
             >
               + New Note
             </button>
@@ -108,7 +111,10 @@ export default function Notes() {
                 <NoteCard
                   key={note._id}
                   note={note}
-                  onEdit={setEditingNote}
+                  onEdit={(note) => {
+                    setEditingNote(note);
+                    setShowModal(true);
+                  }}
                   onDelete={removeNote}
                 />
             ))}

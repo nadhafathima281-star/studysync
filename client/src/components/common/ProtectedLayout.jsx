@@ -17,7 +17,7 @@ export default function ProtectedLayout() {
           setIsOpen={setSidebarOpen}
         />
 
-        <main className="main-content">
+        <main className="main-content page-container">
           <Outlet />
         </main>
       </div>

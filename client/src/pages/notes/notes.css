@@ -8,7 +8,7 @@
 }
 
 .notes-subtitle {
-  color: #6b7280;
+  color: var(--text-muted);
   margin-bottom: 25px;
 }
 
@@ -21,17 +21,18 @@
 }
 
 .stat-card {
-  background: #ffffff;
+  background: var(--surface);
   padding: 20px;
   border-radius: 14px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
 }
 
 .stat-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -47,10 +48,11 @@
 }
 
 .notes-card {
-  background: #ffffff;
+  background: var(--surface);
   padding: 20px;
   border-radius: 14px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
 }
 
 .header-row {
@@ -61,11 +63,11 @@
 
 /* Note Card */
 .note-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 16px;
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .note-header {
@@ -81,31 +83,42 @@
 
 .note-subject {
   font-size: 12px;
-  color: #6366f1;
+  color: var(--accent);
 }
 
 .note-content {
   margin-top: 10px;
-  color: #4b5563;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
 /* Buttons */
 .primary-btn {
-  background: #6366f1;
+  background: var(--accent);
   color: white;
   border: none;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.primary-btn:hover{
+  opacity: 0.9;
 }
 
 .secondary-btn {
   background: transparent;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+}
+
+.secondary-btn:hover{
+  background: var(--input-bg);
 }
 
 /* Subjects */
@@ -116,7 +129,9 @@
 }
 
 .subject-badge {
-  background: #e0e7ff;
+  color: var(--accent);
+  background: rgba(99, 102, 241, 0.15);
+
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
@@ -134,7 +149,9 @@
 .note-textarea {
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text-primary);
 }
 
 .note-textarea {

@@ -1,14 +1,13 @@
-const express=require("express");
-const router=express.Router();
+const express = require("express");
+const router = express.Router();
 
-// middlewares
-const protect=require("../middleware/authMiddleware");
-const adminOnly=require("../middleware/adminMiddleware");
+const protect = require("../middleware/authMiddleware");
+const adminOnly = require("../middleware/adminMiddleware");
 
-// controller
-const{getAdminStats}=require("../controllers/adminController");
+const { getAdminStats, getRecentUsers } = require("../controllers/adminController");
 
-// admin dashboard statistics
-router.get("/stats",protect,adminOnly,getAdminStats);
+router.get("/stats", protect, adminOnly, getAdminStats);
 
-module.exports=router;
+router.get("/recent-users", protect, adminOnly, getRecentUsers);
+
+module.exports = router;

@@ -21,6 +21,7 @@ export const updateTask=(id,data)=>{
     return api.put(`/tasks/${id}`,data)
 }
 
+
 // Delete task
 export const deleteTask=(id)=>{
     return api.delete(`/tasks/${id}`)

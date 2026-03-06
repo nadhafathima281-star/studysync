@@ -84,6 +84,7 @@ export const AuthProvider = ({ children }) => {
         forgot,
         verifyResetOtp,
         reset,
+        setUser,
       }}
     >
       {children}

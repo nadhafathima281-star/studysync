@@ -125,7 +125,7 @@ export default function Flashcards() {
             <ul>
               <li>Create a deck</li>
               <li>Add question & answer</li>
-              <li>Flip to reveal answer</li>
+              <li>Click to reveal answer</li>
               <li>Repeat for mastery</li>
             </ul>
           </div>

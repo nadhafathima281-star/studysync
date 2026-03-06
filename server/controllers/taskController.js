@@ -61,31 +61,29 @@ const getTaskById=async(req,res)=>{
 
 // UPDATE TASK
 // update task details(title,status, etc.)
-const updateTask=async(req,res)=>{
-    try{
-        const task=await Task.findOne({
-            _id:req.params.id,
-            user:req.user.id,
-        })
+const updateTask = async (req, res) => {
+  try {
 
-        if(!task){
-            return res.status(404).json({message:'Task not found'})
-        }
+    const updatedTask = await Task.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        user: req.user.id   // ensures user can only update their own task
+      },
+      req.body,
+      { new: true }
+    );
 
-        const{title,description,status,dueDate}=req.body
-
-        if(title !== undefined) task.title=title
-        if(description !== undefined) task.description=description
-        if(status !== undefined) task.status=status
-        if(dueDate !== undefined) task.dueDate=dueDate
-
-        await task.save()
-
-        res.json(task)  //send  task data to client
-    }catch(error){
-        res.status(500).json({message:'Failed to update task'})
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Task not found" });
     }
-}
+
+    res.json(updatedTask);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update task" });
+  }
+};
 
 // DELETE TASK
 // delete a task of thr logged-in user

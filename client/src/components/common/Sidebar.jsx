@@ -7,6 +7,9 @@ import {
   FiMessageSquare,
   FiLogOut,
   FiX,
+  FiUser,
+  FiClock,
+  FiShield
 } from "react-icons/fi";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -40,16 +43,21 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         {/* Profile */}
         <div className="sidebar-profile">
           <div className="profile-left">
-            <div className="avatar">
-              {user?.name?.charAt(0)?.toUpperCase() || "U"}
-            </div>
+           <img
+  src={
+    user?.avatar ||
+    "https://api.dicebear.com/7.x/personas/svg?seed=study1"
+  }
+  alt="avatar"
+  className="avatar"
+/>
 
             <div className="profile-text">
               <div className="profile-name">
                 {user?.name}
               </div>
               <div className="profile-role">
-                Student
+                {user.role}
               </div>
             </div>
           </div>
@@ -71,6 +79,12 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             <FiGrid /> Dashboard
           </NavLink>
 
+          {user?.role === "admin" && (
+            <NavLink to="/admin" className="sidebar-link" onClick={handleClose}>
+              <FiShield/> Admin Dashboard
+            </NavLink>
+          )}
+
           <NavLink to="/tasks" className="sidebar-link" onClick={handleClose}>
             <FiCheckSquare /> Tasks
           </NavLink>
@@ -89,6 +103,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
           <NavLink to="/ai-chat" className="sidebar-link" onClick={handleClose}>
             <FiMessageSquare /> AI Chat
+          </NavLink>
+
+          <NavLink to="/profile" className="sidebar-link" onClick={handleClose}>
+            <FiUser /> Profile
+          </NavLink>
+
+          <NavLink to="/pomodoro" className="sidebar-link" onClick={handleClose}>
+            <FiClock /> Pomodoro
           </NavLink>
         </div>
 

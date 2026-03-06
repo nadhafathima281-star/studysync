@@ -12,7 +12,7 @@ export default function FlashcardViewer({ card, currentIndex }) {
 
   return (
     <div
-      className="flashcard-static clickable"
+      className={`flashcard-static clickable ${showAnswer ? "answer-mode" : ""}`}
       onClick={() => setShowAnswer(prev => !prev)}
     >
       {!showAnswer ? (

@@ -72,7 +72,7 @@ export const FlashcardProvider = ({ children }) => {
   const fetchCardsByDeck = async (deckId) => {
     setLoading(true);
     try {
-      const res = await api.get(`/flashcards/${deckId}`);
+      const res = await api.get(`/flashcards/deck/${deckId}`);
       setCards(res.data);
     } catch (error) {
       toast.error("Failed to fetch flashcards");
@@ -85,9 +85,9 @@ export const FlashcardProvider = ({ children }) => {
      CREATE CARD
   ================================= */
 
-  const createCard = async (deckId, data) => {
+  const createCard = async (data) => {
     try {
-      const res = await api.post(`/flashcards/${deckId}`, data);
+      const res = await api.post('/flashcards', data);
       setCards((prev) => [res.data, ...prev]);
       toast.success("Flashcard added");
     } catch (error) {

@@ -38,7 +38,7 @@ export default function ResourceForm({ onSubmit, onCancel }) {
 
       <input
         type="file"
-        accept=".pdf,.png,.jpg,.doc,.docx"
+        accept=".pdf,image/*,.doc,.docx"
         onChange={(e) => setFile(e.target.files[0])}
       />
 

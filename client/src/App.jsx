@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ProtectedLayout from "./components/common/ProtectedLayout";
@@ -11,6 +11,8 @@ import Flashcards from "./pages/flashcards/Flashcards";
 import DeckStudy from "./pages/flashcards/DeckStudy";
 import Resources from "./pages/resources/Resources";
 import AIPage from "./pages/ai/AIPage";
+import Profile from "./pages/profile/Profile";
+import Pomodoro from "./pages/pomodoro/Pomodoro";
 
 // Auth pages
 import Login from "./pages/auth/Login";
@@ -50,6 +52,8 @@ export default function App() {
         <Route path="/flashcards/:deckId" element={<DeckStudy/>}/>
         <Route path="/resources" element={<Resources />} />
         <Route path="/ai-chat" element={<AIPage />} />
+        <Route path="/pomodoro" element={<Pomodoro />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
       {/* ================= ADMIN ROUTES ================= */}
@@ -62,6 +66,9 @@ export default function App() {
       >
         <Route path="/admin" element={<AdminDashboard />} />
       </Route>
+
+      {/* prevent blank page by redirecting to dashboard */}
+      <Route path="*" element={<Navigate to="/" />} />
 
     </Routes>
   );

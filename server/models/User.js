@@ -22,6 +22,10 @@ const userSchema=new mongoose.Schema(
             type:String,
             required:true,
         },
+        avatar:{
+            type:String,
+            default:"https://api.dicebear.com/7.x/personas/svg?seed=default"
+        },
         role:{
             type:String,
             enum:['student','admin'],

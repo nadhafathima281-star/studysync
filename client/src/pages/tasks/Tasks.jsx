@@ -29,6 +29,7 @@ export default function Tasks() {
       await editTask(task._id,  { status: newStatus});
   };
 
+
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(
     (t) => t.status === "completed"
@@ -50,14 +51,16 @@ export default function Tasks() {
     { day: "Fri", value: 1 },
   ];
 
-  const filteredTasks = tasks.filter((task)=> {
-    if(filter === "active") return task.status !== "completed";
-    if(filter === "completed") return task.status === "completed";
-    return true; //all
-  })
+ const filteredTasks = tasks
+.filter((task)=>{
+  if(filter === "active") return task.status !== "completed";
+  if(filter === "completed") return task.status === "completed";
+  return true;
+})
+.sort((a,b)=> new Date(a.dueDate) - new Date(b.dueDate));
 
   return (
-    <div className="tasks-page">
+    <div className="tasks-page page-container">
 
       <h1 className="tasks-title">Tasks & Assignments</h1>
       <p className="tasks-subtitle">
@@ -103,26 +106,28 @@ export default function Tasks() {
           </div>
 
             <TaskForm onSubmit={addTask} />
-
-            {loading && <Loader text="Loading tasks..." />}
-
-            {!loading && filteredTasks.length === 0 && (
-              <EmptyState
-                title="No tasks yet"
-                description="Add your first task to get started."
-              />
-            )}
-
-            {!loading &&
-              filteredTasks.map((task) => (
-                <TaskCard
-                  key={task._id}
-                  task={task}
-                  onDelete={removeTask}
-                  onEdit={setEditingTask}
-                  onToggle={handleToggle}
+              <div className="tasks-scroll">
+  
+              {loading && <Loader text="Loading tasks..." />}
+  
+              {!loading && filteredTasks.length === 0 && (
+                <EmptyState
+                  title="No tasks yet"
+                  description="Create your first task to start organizing your study work."
                 />
-              ))}
+              )}
+  
+              {!loading &&
+                filteredTasks.map((task) => (
+                  <TaskCard
+                    key={task._id}
+                    task={task}
+                    onDelete={removeTask}
+                    onEdit={setEditingTask}
+                    onToggle={handleToggle}
+                  />
+                ))}
+</div>
           </div>
         </div>
 
@@ -157,7 +162,10 @@ export default function Tasks() {
       </div>
 
       {editingTask && (
-        <Modal onClose={closeModal}>
+        <Modal 
+          title="Edit Task"
+          subtitle="Update task details"
+          onClose={closeModal}>
           <TaskForm
             initialData={editingTask}
             onSubmit={handleUpdate}

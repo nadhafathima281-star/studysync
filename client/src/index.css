@@ -1,4 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ===================================================== */
+/* GLOBAL UI POLISH */
+/* ===================================================== */
 
+/* Page fade animation */
+
+.page-container{
+animation: fadePage .35s ease;
+}
+
+@keyframes fadePage{
+from{
+opacity:0;
+transform:translateY(6px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* Smooth hover interactions */
+
+button,
+.sidebar-link,
+.search-item{
+transition: all .2s ease;
+}
+svg {
+    /* transform: none !important; */
+    vertical-align: middle;
+}

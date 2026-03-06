@@ -14,6 +14,7 @@ const adminRoutes=require('./routes/adminRoutes')
 const reportRoutes=require('./routes/reportRoutes')
 const aiRoutes=require('./routes/aiRoutes')
 const dashboardRoutes=require('./routes/dashboardRoutes')
+const pomodoroRoutes=require('./routes/pomodoroRoutes')
 connectDB(); //  MongoDB connection
 
 const app = express();
@@ -40,6 +41,8 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+app.use("/uploads", express.static("uploads")); //serve static files from uploads folder
+
 
 app.get("/", (req, res) => {
   res.send("StudySync server is running");
@@ -60,7 +63,6 @@ app.use('/api/flashcards',flashcardRoutes)
 // resource routes
 app.use('/api/resources',resourceRoutes)
 
-app.use('/uploads', express.static('uploads')); // serve uploaded files
 
 // admin routes
 app.use('/api/admin',adminRoutes)
@@ -73,6 +75,9 @@ app.use('/api/ai',aiRoutes)
 
 // dashboard routes
 app.use('/api/dashboard',dashboardRoutes)
+
+// pomodoro routes
+app.use('/api/pomodoro',pomodoroRoutes)
 
 // get port no from .env ot use 5000 as default
 const PORT = process.env.PORT || 5000;   

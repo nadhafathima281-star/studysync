@@ -9,12 +9,13 @@
   flex: 1;
   display: flex;
   overflow: hidden;
+  align-items: stretch;
 }
 
 .main-content {
   flex: 1;
   padding: 24px;
-  background: var(--surface);
+  background: var(--bg);
   overflow-y: auto;
 }
 

@@ -48,32 +48,38 @@ export const TaskProvider = ({ children }) => {
   };
 
   // create task
-  const addTask = async (data) => {
-    try {
-      const res = await createTask(data);
-      setTasks((prev) => [res.data, ...prev]);
-      toast.success("Task created");
-    } catch (err) {
-      toast.error(
-        err?.response?.data?.message || "Failed to create task"
-      );
-    }
-  };
+ const addTask = async (data) => {
+  try {
+    const res = await createTask(data);
+
+    setTasks((prev) => {
+      const exists = prev.find((t) => t._id === res.data._id);
+      if (exists) return prev;
+      return [res.data, ...prev];
+    });
+
+    toast.success("Task created");
+  } catch (err) {
+    toast.error(
+      err?.response?.data?.message || "Failed to create task"
+    );
+  }
+};
 
   // update task
-  const editTask = async (id, data) => {
-    try {
-      const res = await updateTask(id, data);
-      setTasks((prev) =>
-        prev.map((task) => (task._id === id ? res.data : task))
-      );
-      toast.success("Task updated");
-    } catch (err) {
-      toast.error(
-        err?.response?.data?.message || "Failed to update task"
-      );
-    }
-  };
+const editTask = async (id, data) => {
+  try {
+    await updateTask(id, data);
+
+    await fetchTasks(); // reload tasks from backend
+
+    toast.success("Task updated");
+  } catch (err) {
+    toast.error(
+      err?.response?.data?.message || "Failed to update task"
+    );
+  }
+};
 
   // delete task
   const removeTask = async (id) => {

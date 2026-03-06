@@ -26,7 +26,7 @@
   /* Text */
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-muted: #6b7280;
 
   /* Accent */
   --accent: #6366f1;
@@ -108,11 +108,12 @@ body {
   border-radius: 16px;
   padding: 20px;
   box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
+  transition: all 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* ===================================================== */

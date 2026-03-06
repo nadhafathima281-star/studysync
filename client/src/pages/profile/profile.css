@@ -1,0 +1,233 @@
+/* =========================
+   PROFILE PAGE
+========================= */
+
+.profile-page{
+max-width:900px;
+margin:auto;
+padding:30px;
+}
+
+
+/* =========================
+   PROFILE CARD
+========================= */
+
+.profile-card{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:20px;
+padding:30px;
+box-shadow:var(--shadow-sm);
+}
+
+
+/* =========================
+   PROFILE HEADER
+========================= */
+
+.profile-header{
+display:flex;
+align-items:center;
+gap:20px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.profile-avatar{
+width:90px;
+height:90px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid var(--accent);
+background:var(--surface);
+}
+
+.profile-main h2{
+margin:0;
+font-size:1.3rem;
+}
+
+.profile-main p{
+margin-top:4px;
+color:var(--text-secondary);
+font-size:0.9rem;
+}
+
+
+/* =========================
+   PROFILE GRID
+========================= */
+
+.profile-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.profile-item span{
+font-size:13px;
+color:var(--text-secondary);
+}
+
+.profile-item p{
+margin-top:4px;
+font-weight:500;
+}
+
+
+/* =========================
+   MODAL OVERLAY
+========================= */
+
+.profile-modal-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.45);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
+
+/* =========================
+   MODAL CARD
+========================= */
+
+.profile-modal{
+background:var(--surface);
+border-radius:18px;
+padding:30px;
+width:420px;
+max-width:95%;
+box-shadow:var(--shadow-lg);
+animation:modalFade .2s ease;
+}
+
+.profile-modal h2{
+margin-bottom:18px;
+}
+
+
+/* =========================
+   AVATAR PICKER
+========================= */
+
+.avatar-picker{
+margin-bottom:20px;
+}
+
+.avatar-picker h4{
+font-size:13px;
+color:var(--text-secondary);
+margin-bottom:10px;
+}
+
+.avatar-grid{
+display:grid;
+grid-template-columns:repeat(3,70px);
+gap:12px;
+}
+
+.avatar-option{
+width:65px;
+height:65px;
+border-radius:50%;
+cursor:pointer;
+border:2px solid transparent;
+transition:all .2s ease;
+}
+
+.avatar-option:hover{
+transform:scale(1.05);
+border-color:var(--accent-light);
+}
+
+.avatar-option.selected{
+border:2px solid var(--accent);
+box-shadow:0 0 0 3px rgba(99,102,241,0.15);
+transform:scale(1.05);
+}
+.profile-avatar:hover{
+  transform: scale(1.05);
+  transition: 0.2s;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.profile-input{
+width:100%;
+padding:10px 14px;
+border-radius:10px;
+border:1px solid var(--border);
+margin-bottom:15px;
+background:var(--background);
+color:var(--text-primary);
+font-size:0.9rem;
+}
+
+.profile-input:focus{
+outline:none;
+border-color:var(--accent);
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.profile-actions{
+display:flex;
+justify-content:flex-end;
+gap:10px;
+margin-top:10px;
+}
+
+
+/* =========================
+   MODAL ANIMATION
+========================= */
+
+@keyframes modalFade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+.profile-grid{
+grid-template-columns:1fr;
+}
+
+.profile-header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.profile-avatar{
+width:80px;
+height:80px;
+}
+
+.profile-modal{
+padding:25px;
+}
+
+}
