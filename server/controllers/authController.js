@@ -70,8 +70,7 @@ const registerUser=async(req,res)=>{
         )
 
         // verification link
-const verificationLink = `${process.env.BACKEND_URL}/api/auth/verify-email/${token}`;           
-        // send verification email
+        const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email/${token}`;        // send verification email
         await sendEmail({
             to: emailLower,
             subject: "Verify your StudySync account",
