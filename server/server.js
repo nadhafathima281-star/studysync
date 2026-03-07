@@ -21,11 +21,17 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend URL
-          
-    credentials: true,              // allow cookies
+    
+    origin: [
+      "http://localhost:5173",
+      "https://studysync-ecru.vercel.app"
+    ],
+    credentials: true,
   })
 );
+    
+          
+
 
 app.use(cookieParser())
 app.use((req, res, next) => {
