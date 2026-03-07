@@ -22,10 +22,7 @@ const app = express();
 app.use(
   cors({
     
-    origin: [
-      "http://localhost:5173",
-      "https://studysync-ecru.vercel.app"
-    ],
+    origin:true,
     credentials: true,
   })
 );
